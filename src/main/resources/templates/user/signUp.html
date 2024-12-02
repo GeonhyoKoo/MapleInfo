@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox">
+		
+		<img src="/img/maplelogo.jpg" alt="logo" class="logoImg">
+		
+		<form id="loginForm" action="/user/sign-in" method="POST">
+			<div class="col-10 loginBox">
+				<div class="d-flex justify-content-center align-items-center">
+						<h1>회원가입</h1>
+				</div>
+				
+				<!-- 이름 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>이름</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control infoBoxUp" id="name" name="name" placeholder="이름을 입력하세요.">
+					</div>
+				</div>
+				
+				<!--  생년월일 --> 
+				<div>
+					<div class="d-flex ml-5">
+						<span>생년월일</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control birthBox mx-2" id="year" name="year" placeholder="년(4자)">
+						<input type ="text" class="form form-control birthBox mx-2" id="month" name="month" placeholder="월(최대 2자)">
+						<input type ="text" class="form form-control birthBox mx-2" id="day" name="day" placeholder="일(최대 2자)">
+					</div>
+				</div>
+				
+				<!-- 휴대폰번호 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>휴대폰번호</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control infoBoxUp" id="phoneNumber" name="phoneNumber" placeholder="-를 제외하고 입력하세요.">
+					</div>
+				</div>
+				
+				<!-- 이메일 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>이메일</span>
+					</div>
+					<div class="d-flex justify-content-center my-3 align-items-center">
+						<input type ="text" class="form form-control emailBox mx-3 w-50" id="email" name="email" placeholder="아이디">
+						<span>@</span>
+						<select id="emailDomain" class="selectBox mx-3 w-25">
+							<option value="">------</option>
+							<option value="naver.com">naver.com</option>
+							<option value="gmail.com">gmail.com</option>
+							<option value="kakao.com">kakao.com</option>
+						</select>
+					</div>
+				</div>
+				
+				<!-- 아이디 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>아이디</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control idBox mx-3" id="loginId" name="loginId" placeholder="특수문자를 제외한 영문과 숫자로 5~10자 아이디를 입력하세요.">
+						<button type="button" id="duplicateBtn" class="btn btn-danger text-white mx-3">중복 확인</button>
+					</div>
+				</div>
+				
+				<div class="d-flex justify-content-center">
+					<div id="idCheckOk" class="small text-success d-none">사용 가능한 ID 입니다. 회원가입을 진행해주세요.</div>
+					<div id="idCheckDuplicate" class="small text-danger d-none">이미 사용중인 ID입니다.</div>
+					<div id="idCheckBlank" class="small text-danger d-none">아이디에 공백 사용은 불가능합니다.</div>
+					<div id="idCheckSpecial" class="small text-danger d-none">아이디에 특수문자를 포함할 수 없습니다.</div>
+					<div id="idCheckNotOnlyNumber" class="small text-danger d-none">아이디는 숫자로만 구성할 수 없습니다.</div>
+				</div>
+				
+				<!-- 비밀번호 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>비밀번호</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="password" class="form form-control infoBoxUp" id="password" name="password" placeholder="6 ~ 10 자리의 비밀번호를 입력해주세요.">
+					</div>
+				</div>				
+				
+				<!-- 비밀번호 확인 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>비밀번호 확인</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="password" class="form form-control infoBoxUp" id="confirmPassword" name="confirmPassword">
+					</div>
+				</div>
+				
+				<div class="ml-3 mb-3">
+					<div id="passwordCheckFail" class="small text-danger d-none">비밀번호가 일치하지 않습니다.</div>
+					<div id="passwordCheckOk" class="small text-success d-none">비밀번호가 일치합니다.</div>
+				</div>
+				
+				<!-- 가입하기 버튼 -->
+				<div class="d-flex justify-content-center my-4">
+					<input type="submit" id="signUpBtn" class="btn btn-danger" value="가입하기">
+				</div>
+				
+				<!-- 안내 메세지 -->
+				<div class="text-center d-none">
+					<span class="text-danger">아이디 또는 비밀번호가 잘못되었습니다.</span>
+				</div>
+				
+				<!--  아이디 찾기 / 비밀번호 찾기 / 회원가입 -->
+				<div class="text-center infoTag">
+					<span class="mx-2"><a href="/user/find-id-view">아이디 찾기</a></span>
+					<span class="mx-2"><a href="/user/find-pw-view">비밀번호 찾기</a></span>
+					<span class="mx-2"><a href="/user/sign-up-view">회원가입</a></span>
+				</div>
+			</div>
+		</form>
+		
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	
+	<script>
+		$(document).ready(function(){
+				
+			// 아이디 중복 확인
+			$("#duplicateBtn").on("click" , function(){
+				
+				// 문구 초기화
+				$("#idCheckDuplicate").addClass("d-none");
+				$("#idCheckOk").addClass("d-none");
+				$("#idCheckNotOnlyNumber").addClass("d-none");
+				$("#idCheckBlank").addClass("d-none");
+				$("#idCheckSpecial").addClass("d-none");
+				
+				let loginId = $("#loginId").val().trim();
+				
+				// validation check
+				// 1 빈 아이디
+				if(loginId == ""){
+					alert("아이디를 입력하고 진행해주세요.");
+					return;
+				}
+				
+				// 2 아이디 길이 11자 이상
+				if (loginId.length >= 11){
+					alert("아이디는 최대 9글자까지 가능합니다.");
+					return;
+				}
+				
+				// 3 아이디 길이 5자 미만
+				if (loginId.length < 5){
+					alert("아이디는 5글자 이상 10글자 이하로 가능합니다.");
+					return;
+				}
+				
+				
+				// 3. 숫자만 있는 경우203 , 공백 204, 특수문자 205
+				
+				$.ajax({
+					url : "/user/is-duplicate-id"
+					, data : {"loginId" : loginId}
+					, success : function(data){
+						if (data.code == 200){
+							$("#idCheckOk").removeClass("d-none");
+						} else if (data.code == 202){
+							$("#idCheckDuplicate").removeClass("d-none");
+						} else if (data.code == 203){
+							$("#idCheckNotOnlyNumber").removeClass("d-none");
+						} else if (data.code == 204){
+							$("#idCheckBlank").removeClass("d-none");
+						} else if (data.code == 205){
+							$("#idCheckSpecial").removeClass("d-none");
+						}
+					}
+					, error : function(e) {
+						alert("중복확인에 실패했습니다. 관리자에게 문의해주세요.");
+					}
+				}); 
+			});
+
+			
+			// 비밀번호 확인 체크
+			$("#confirmPassword").on("input" , function(){
+				
+				// 초기화
+				$("#passwordCheckFail").addClass("d-none");
+				$("#passwordCheckOk").addClass("d-none");
+				
+				let password = $("#password").val();
+				let confirmPassword = $("#confirmPassword").val();
+				
+				if(password == confirmPassword){
+					$("#passwordCheckOk").removeClass("d-none");
+				} else {
+					$("#passwordCheckFail").removeClass("d-none");
+				}
+			});
+			
+			
+			
+			// 가입하기
+			$("#signUpBtn").on("click" , function(e){
+				
+				e.preventDefault();
+				
+				// validation check
+				// 이름 빈칸
+				let name = $("#name").val().trim();
+				if (name == ""){
+					alert("이름을 입력해주세요.");
+					return;
+				}
+				
+				// 년 , 월 , 일 빈칸 검사, 년 4자리 검사
+				let year = $("#year").val().trim();
+				if (year == ""){
+					alert("년도를 입력해주세요");
+					return;
+				}
+				if (year.length != 4){
+					alert("년도는 4자리를 모두 입력해주세요.");
+					return;
+				}
+				let month = $("#month").val().trim();
+				if (month.length > 2){
+					alert("월은 최대 2자리까지 입력 가능합니다.");
+					return;
+				}
+				if (month == ""){
+					alert("월을 입력해주세요");
+					return;
+				}
+				let day = $("#day").val().trim();
+				if (day == ""){
+					alert("일을 입력해주세요");
+					return;
+				}
+				if (day.length > 2){
+					alert("일은 최대 2자리까지 입력 가능합니다.");
+					return;
+				}
+				
+				let birth = year + month + day;
+				
+				let phoneNumber = $("#phoneNumber").val().trim();
+				if(phoneNumber == ""){
+					alert("휴대폰 번호를 입력해주세요.");
+					return;
+				}
+				if (phoneNumber.length > 11){
+					alert("휴대폰 번호는 - 를 제외하고 입력해주세요.");
+					return;
+				}
+				
+				
+				// 이메일 검사
+				let emailId = $("#email").val();
+				let mailDomain = $("#emailDomain option:selected").val();
+				
+				if (emailId == ""){
+					alert("이메일 아이디를 입력해주세요.");
+					return;
+				}
+				
+				if(mailDomain == ""){
+					alert("메일의 도메인을 선택해주세요.");
+					return;
+				}
+				
+				let email = emailId + mailDomain;
+				
+				
+				// 아이디 중복체크 여부
+				if ($("#idCheckOk").hasClass("d-none")){
+					alert("아이디 중복확인 후 회원가입이 가능합니다.");
+					return;
+				}
+				
+				let loginId = $("#loginId").val().trim();
+				
+				
+				// 비밀번호 체크
+				let password = $("#password").val();
+				
+				// 비밀번호 일치여부 확인
+				if ($("#passwordCheckOk").hasClass("d-none")){
+					alert("비밀번호와 비밀번호 확인이 일치해야 회원가입이 가능합니다.");
+					return;
+				}
+				
+				
+				// ajax
+				$.ajax({
+					type : "POST"
+					, url : "/user/sign-up"
+					, data : {"name" : name , "birth" : birth , "phoneNumber" : phoneNumber , 
+						"email" : email , "loginId" : loginId , "password" : password}
+					, success : function(data){
+						if (data.code == 201){
+							alert("환영합니다. 가입이 완료되었습니다.");
+							location.href = "/user/sign-in-view";
+						} 
+					}
+					, error : function(e){
+						alert(data.error_message);
+					}
+				});
+				
+				
+				
+				
+			});
+			
+			
+			
+			
+			
+		});
+	
+	
+	
+	</script>
+	
+
+</th:block>

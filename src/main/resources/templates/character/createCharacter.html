@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox">
+		
+		<img src="/img/maplelogo.jpg" alt="logo" class="logoImg">
+		
+			<div class="col-10 loginBox">
+				<div class="d-flex justify-content-center align-items-center">
+						<h1>캐릭터 추가</h1>
+				</div>
+				
+				<!-- 닉네임 -->
+				<div>
+					<div class="d-flex ml-5 ">
+						<span>닉네임</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control infoBoxUp" id="name" name="name" placeholder="닉네임을 입력하세요.">
+						<button type="button" id="duplicateBtn" class="btn btn-danger text-white">조회</button>
+					</div>
+				</div>
+				
+				<div class="d-flex justify-content-center">
+					<div id="characterCheckOk" class="small text-success d-none">등록 가능한 캐릭터 입니다.</div>
+					<div id="characterDuplicate" class="small text-danger d-none">이미 등록된 캐릭터 입니다.</div>
+				</div>
+				
+				
+				
+				<!-- 직업 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>직업</span>
+					</div>
+					<div class="d-flex justify-content-center my-3 align-items-center">
+						<select id="characterClass" class="selectBox mx-3 w-50">
+							<option value="">------</option>
+							<option value="히어로">히어로</option>
+							<option value="다크나이트">다크나이트</option>
+							<option value="팔라딘">팔라딘</option>
+							<option value="아델">아델</option>
+							<option value="카이저">카이저</option>
+							<option value="블래스터">블래스터</option>
+							<option value="데몬슬레이어">데몬슬레이어</option>
+							<option value="데몬어벤져">데몬어벤져</option>
+							<option value="소울마스터">소울마스터</option>
+							<option value="미하일">미하일</option>
+							<option value="아란">아란</option>
+							<option value="제로">제로</option>
+							<option value="썬콜">썬콜</option>
+							<option value="불독">불독</option>
+							<option value="비숍">비숍</option>
+							<option value="에반">에반</option>
+							<option value="라라">라라</option>
+							<option value="일리움">일리움</option>
+							<option value="키네시스">키네시스</option>
+							<option value="플레임위자드">플레임위자드</option>
+							<option value="배틀메이지">배틀메이지</option>
+							<option value="루미너스">루미너스</option>
+							<option value="보우마스터">보우마스터</option>
+							<option value="신궁">신궁</option>
+							<option value="윈드브레이커">윈드브레이커</option>
+							<option value="와일드헌터">와일드헌터</option>
+							<option value="메르세데스">메르세데스</option>
+							<option value="패스파인더">패스파인더</option>
+							<option value="카인">카인</option>
+							<option value="나이트로드">나이트로드</option>
+							<option value="섀도어">섀도어</option>
+							<option value="듀얼블레이드">듀얼블레이드</option>
+							<option value="나이트워커">나이트워커</option>
+							<option value="팬텀">팬텀</option>
+							<option value="카데나">카데나</option>
+							<option value="호영">호영</option>
+							<option value="칼리">칼리</option>
+							<option value="바이퍼">바이퍼</option>
+							<option value="캡틴">캡틴</option>
+							<option value="캐논슈터">캐논슈터</option>
+							<option value="스트라이커">스트라이커</option>
+							<option value="은월">은월</option>
+							<option value="엔젤릭버스터">엔젤릭버스터</option>
+							<option value="제논">제논</option>
+							<option value="아크">아크</option>
+							<option value="메카닉">메카닉</option>
+						</select>
+					</div>
+				</div>
+				
+				<!-- 월드 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>월드</span>
+					</div>
+					<div class="d-flex justify-content-center my-3 align-items-center">
+						<select id="world" class="selectBox mx-3 w-50">
+							<option value="">------</option>
+							<option value="스카니아">스카니아</option>
+							<option value="루나">루나</option>
+							<option value="엘리시움">엘리시움</option>
+							<option value="크로아">크로아</option>
+							<option value="베라">베라</option>
+							<option value="오로라">오로라</option>
+							<option value="리부트">리부트</option>
+						</select>
+					</div>
+				</div>
+				
+				<!-- 레벨 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>레벨</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control infoBoxUp" id="level" name="level" placeholder="레벨은 숫자만 입력하세요. ex) 252">
+					</div>
+				</div>
+				
+				
+				<!-- 전투력 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>전투력</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control infoBoxUp" id="stat" name="stat" placeholder="전투력은 억, 만 단위 외엔 숫자만 입력하세요. ex) 1억 200만 2343">
+					</div>
+				</div>
+				
+				<!-- 이미지 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>캐릭터 이미지</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" id="imgName" class="form form-control infoBoxUp mx-3">
+						<input type ="file" id="characterImg" accept=".jpg, .png">
+					</div>
+				</div>
+				
+				<!-- 추가하기 버튼 -->
+				<div class="d-flex justify-content-center my-4">
+					<input type="submit" id="createBtn" class="btn btn-danger" value="추가하기">
+				</div>
+				
+			</div>
+		
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	
+	<script>
+		$(document).ready(function(){
+			
+			// 닉네임 체크
+			$("#duplicateBtn").on("click" , function(){
+				
+				$("#characterCheckOk").addClass("d-none");
+				$("#characterDuplicate").addClass("d-none");
+				
+				let name = $("#name").val().trim();
+				if(name == ""){
+					alert("닉네임을 입력하고 진행해주세요.");
+					return;
+				}
+				
+				$.ajax({
+					url : "/character/is-duplicate"
+					, data : {"name" : name}
+					, success : function(data){
+						if(data.code == 200){
+							$("#characterCheckOk").removeClass("d-none");
+						} else if (data.code == 202){
+							$("#characterDuplicate").removeClass("d-none");
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href = "/user/sign-in-view";
+						}
+					}
+					, error : function(e){
+						alert(data.error_message);
+					}
+				});
+				
+			});
+			
+			
+			// 파일체크
+			$("#characterImg").on("input" , function(e){
+				
+				if(e.target.files[0] == null){
+					$("#characterImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				let fileName = e.target.files[0].name;
+				
+				let ext = fileName.split(".").pop().toLowerCase();
+				console.log(ext);
+				
+				if (ext != "jpg" && ext != "png"){
+					alert("jpg, png 파일만 업로드 가능합니다.");
+					$("#characterImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				$("#imgName").val(fileName);
+			});
+			
+			// 추가하기
+			$("#createBtn").on("click" , function(e){
+				
+				e.preventDefault();
+				
+				//validation
+				let name = $("#name").val().trim();
+				let characterClass = $("#characterClass").val();
+				let world = $("#world").val();
+				let level = $("#level").val();
+				let stat = $("#stat").val();
+				let file = $("#characterImg").val();
+				
+				if (name == ""){
+					alert("닉네임을 입력해주세요.");
+					return;
+				}
+				
+				if ($("#characterCheckOk").hasClass("d-none")){
+					alert("닉네임 중복 확인 후 진행가능합니다.");
+					return;
+				}
+				
+				
+				if (characterClass == ""){
+					alert("직업을 선택해주세요.");
+					return;
+				}
+				if (world == ""){
+					alert("월드를 선택해주세요.");
+					return;
+				}
+				if (level == ""){
+					alert("레벨을 입력해주세요.");
+					return;
+				}
+				if (stat == ""){
+					alert("전투력을 입력해주세요.");
+					return;
+				}
+				if (stat == ""){
+					alert("캐릭터의 이미지를 첨부해주세요.");
+					return;
+				}
+				
+				let ext = file.split(".").pop().toLowerCase();
+				if (ext != "jpg" && ext != "png"){
+					alert("jpg, png 파일만 업로드 가능합니다.");
+					$("#characterImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				let formData = new FormData();
+				formData.append("name" , name);
+				formData.append("characterClass" , characterClass);
+				formData.append("world" , world);
+				formData.append("level" , level);
+				formData.append("stat" , stat);
+				formData.append("file" , $("#characterImg")[0].files[0]);
+				
+				$.ajax({
+					type : "POST"
+					, url : "/character/create-character"
+					, data : formData
+					, enctype : "multipart/form-data"
+					, processData : false
+					, contentType : false
+					, success : function(data){
+						if (data.code == 201){
+							alert(data.result);
+							location.href = "/character/change-view";
+						} else if (data.code == 310){
+							alert(data.error_message);
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href = "/user/sign-in-view";
+						}
+					}
+					, error : function(e){
+						alert(data.error_message);
+					}
+				});
+				
+				
+			});
+			
+			
+		});
+	
+	
+	
+	</script>
+	
+
+</th:block>

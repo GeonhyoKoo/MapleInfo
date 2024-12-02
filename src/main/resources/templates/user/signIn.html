@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox">
+		
+		<img src="/img/maplelogo.jpg" alt="logo" class="logoImg">
+		
+			<div class="col-10 loginBox">
+				<div class="d-flex justify-content-center align-items-center">
+						<h1>로그인</h1>
+				</div>
+				<!-- 아이디 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>아이디</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" class="form form-control infoBox" id="loginId" name="loginId" placeholder="아이디를 입력하세요.">
+					</div>
+				</div>
+				
+				<!-- 비밀번호 -->
+				<div>
+					<div class="ml-5">
+						<span>비밀번호</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="password" class="form form-control infoBox" id="password" name="password" placeholder="비밀번호를 입력하세요.">
+					</div>
+				</div>
+			
+				<!-- 안내 메세지 -->
+				<div class="text-center d-none" id="checkInfo">
+					<span class="text-danger">아이디 또는 비밀번호가 잘못되었습니다.</span>
+				</div>
+				
+				
+				<!-- 로그인 버튼 -->
+				<div class="d-flex justify-content-center my-4">
+					<input type="submit" id="loginBtn" class="btn btn-danger" value="로그인">
+				</div>
+				
+				<!--  아이디 찾기 / 비밀번호 찾기 / 회원가입 -->
+				<div class="text-center infoTag">
+					<span class="mx-2"><a href="/user/find-id-view">아이디 찾기</a></span>
+					<span class="mx-2"><a href="/user/find-pw-view">비밀번호 찾기</a></span>
+					<span class="mx-2"><a href="/user/sign-up-view">회원가입</a></span>
+				</div>
+			</div>
+		
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	<script>
+		$(document).ready(function(){
+			
+			$("#loginBtn").on("click" , function(e){
+				
+				
+				$("#checkInfo").addClass("d-none");
+				
+				
+				let loginId = $("#loginId").val().trim();
+				let password = $("#password").val().trim();
+				
+				if(loginId == ""){
+					alert("아이디를 입력해주세요.");
+					return;
+				}
+
+				if(password == ""){
+					alert("비밀번호를 입력해주세요.");
+					return;
+				}
+				
+				$.ajax({
+					type : "POST"
+					, url : "/user/sign-in"
+					, data : {"loginId" : loginId , "password" : password}
+					, success : function(data){
+						if (data.code == 200){
+							location.href ="/mapleinfo"
+						} else if (data.code == 306){
+							$("#checkInfo").removeClass("d-none");
+						}
+					}
+					, error : function(e){
+						alert("로그인에 실패했습니다. 관리자에게 문의해주세요.");
+					}
+				});
+			});
+			
+			
+		});
+	</script>
+</th:block>

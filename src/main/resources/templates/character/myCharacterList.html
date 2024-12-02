@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox mb-4">
+		<h2>내 캐릭터 조회</h2>		
+		<!-- 캐릭터 조회 부분 -->
+		<div th:if="${exist == 1}" class="infoSection d-flex">
+			<!--  캐릭터 부분 -->
+			<div class="col-3">
+				<img th:src="${representCharacter.characterImg}" class="w-100 h-100">
+			</div>
+			<!--  캐릭터 설명 부분 -->
+			<div class="col-9 py-3">
+				<div class="mb-1">
+					<span class="font-weight-bold">닉네임 : </span>
+					<span th:text="${representCharacter.name}">닉네임</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">레벨 : </span>
+					<span th:text="${representCharacter.level}">레벨</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">직업 : </span>
+					<span th:text="${representCharacter.characterClass}">직업</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">월드명 : </span>
+					<span th:text="${representCharacter.world}">월드명</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">전투력 : </span>
+					<span th:text="${representCharacter.stat}">전투력</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">랭킹 : </span>
+					<span th:text="${representCharacter.level}">랭킹</span>
+				</div>
+			</div>
+		</div>
+		
+		<div th:if="${exist == -1}" class="d-flex justify-content-center">
+			<div class="font-weight-bold text-danger">대표 캐릭터가 존재하지 않습니다. 캐릭터 추가하기를 통해 등록해주세요.</div>
+		</div>
+		
+		<!--  내 캐릭터 목록 -->
+		<div class="mt-5">
+			<table class="table text-center">
+				<thead class="font-weight-bold">
+					<tr>
+						<td>No</td>
+						<td>닉네임</td>
+						<td>레벨</td>
+						<td>직업</td>
+						<td>월드명</td>
+						<td>전투력</td>
+						<td>대표 캐릭터로 설정하기</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="character : ${characterList}">
+						<td th:text="${character.id}">No</td>
+						<td th:text="${character.name}">닉네임</td>
+						<td th:text="${character.level}">레벨</td>
+						<td th:text="${character.characterClass}">직업</td>
+						<td th:text="${character.world}">월드명</td>
+						<td th:text="${character.stat}">전투력</td>
+						<td th:if="${character.representCharacter == false}" class="pt-2"><button type="button" class="changeBtn btn btn-info" th:data-character-id="${character.id}">지정하기</button></td>
+						<td th:unless="${character.representCharacter == false}" class="font-weigth-bold text-primary">대표 캐릭터</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div th:if="${characterList.isEmpty()}" class="d-flex justify-content-center w-100 mt-5 bg-danger">
+				<span class="font-weight-bold">조회할 캐릭터가 없습니다. 캐릭터를 먼저 추가해주세요.</span>
+			</div>
+			
+		</div>
+		
+		
+		
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+	
+    	$(document).ready(function(){
+    		
+    		$(".changeBtn").on("click" , function(e){
+    			
+    			e.preventDefault();
+    			
+    			let characterId = $(this).data("character-id");
+    			
+    			$.ajax({
+    				url : "/character/designate-represent-character"
+    				, data : {"characterId" : characterId}
+    				, success : function(data){
+    					if (data.code == 206){
+    						alert(data.result);
+    						location.href = "/character/my-character-list-view";
+    					} else if (data.code == 300){
+    						alert(data.error_message);
+    						location.href = "/user/sign-in-view";
+    					} else if (data.code == 302){
+    						alert(data.error_message);
+    					} else if (data.code == 305){
+    						alert(data.error_message);
+    					} else if (data.code == 306){
+    						alert(data.error_message);
+    					}
+    				}
+    				, error : function(e){
+    					alert(e.error_messsage);
+    				}
+    			});
+    			
+    			
+    		});
+    		
+    	});
+    
+    </script>
+</th:block>

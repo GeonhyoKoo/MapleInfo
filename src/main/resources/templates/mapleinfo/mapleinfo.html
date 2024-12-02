@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox">
+		
+		<!--  상단 로고, 검색창 -->
+		<div class="col-10 loginBox mt-3">
+			<div class="d-flex justify-content-center align-items-center">
+				<img src="/img/maplelogo.jpg" alt="logo" class="logoImg">
+			</div>
+				
+			<div class="d-flex justify-content-center my-3">
+				<input type ="text" class="form form-control searchBox infoBoxUp mx-3" id="searchBox" name="searchBox" placeholder="검색하실 닉네임을 공백 없이 입력해주세요.">
+				<button type="button" id="searchBtn" class="btn btn-outline-warning">검색</button>
+			</div>
+		</div>
+		
+		
+		<!-- 여백 공간 -->
+		<div class="blankBox"></div>
+		
+		<!-- 비로그인 시 -->
+		<div class="blankBox d-flex justify-content-between" th:if="${session.id == null}"> 
+			<div class="col-4"></div>
+			<div class="col-4"></div>
+			<div class="col-4">
+				<!-- 로그인 공간 -->
+				<div class="d-flex justify-content-center mt-1">
+					<a href="/user/sign-in-view" class="btn btn-outline-danger">로그인</a>
+				</div>
+				<!--  아이디찾기 / 비밀번호 찾기 / 회원가입 -->
+				<div class="d-flex align-items-center justify-content-between mt-3">
+					<small><a href="/user/find-id-view" class="text-dark">아이디 찾기</a></small>
+					<small><a href="/user/find-pw-view" class="text-dark">비밀번호 찾기</a></small>
+					<small><a href="/user/sign-up-view" class="text-dark">회원가입</a></small>
+				</div>
+			</div>
+		</div>
+			
+		
+		<!--  로그인 && 대표캐릭터 있음 -->
+		<div class="blankBox d-flex justify-content-between" th:if="${session.id != null && exist == 1}"> 
+			<div class="col-3"></div>
+			<div class="col-3"></div>
+			
+			<div class="col-6">
+				<div class="d-flex justify-content-center mb-2"><span th:text="|${session.loginId} 님의 대표 캐릭터|"></span></div>
+				<div class="d-flex"> 
+					<div class="col-6">
+						<img th:src="${character.characterImg}" class="w-100 h-75">
+					</div>
+					
+					<div class="col-6">
+						<div class="mb-1 text-center">
+							<span th:text="${character.name}">닉네임</span>
+						</div>
+						<div class="mb-1 text-center">
+							<span th:text="${character.level}">레벨</span>
+						</div>
+						<div class="mb-1 text-center">
+							<span th:text="${character.characterClass}">직업</span>
+						</div>
+						<div class="mb-1 text-center">
+							<span th:text="${character.world}">월드명</span>
+						</div>
+						<div class="mb-1 text-center">
+							<span th:text="${character.stat}">전투력</span>
+						</div>
+						<div class="mb-1 text-center">
+							<span th:text="${character.level}">랭킹</span>
+						</div>
+					</div>
+				</div>
+				<!--  아이디찾기 / 비밀번호 찾기 / 회원가입 -->
+				<div class="d-flex align-items-center justify-content-between mt-3">
+					<small><a href="/character/my-character-list-view" class="text-dark">대표 캐릭터 변경</a></small>
+					<small><a href="/user/myinfo" class="text-dark">정보 수정하기</a></small>
+				</div>
+			</div>
+		</div>
+		
+		<!--  로그인 && 대표캐릭터 없음 -->
+		<div class="blankBox d-flex justify-content-between" th:if="${session.id != null && exist == 0}"> 
+			<div class="col-4"></div>
+			<div class="col-4"></div>
+			<div class="col-4">
+				<div class="d-flex justify-content-center">
+					<div class="text-white bg-danger">대표 캐릭터가 없습니다.</div>
+				</div>
+				
+				<!--  아이디찾기 / 비밀번호 찾기 / 회원가입 -->
+				<div class="d-flex align-items-center justify-content-between mt-3">
+					<small><a href="/character/my-character-list-view" class="text-dark">대표 캐릭터 변경</a></small>
+					<small><a href="/user/myinfo" class="text-dark">정보 수정하기</a></small>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+		
+</section>
+
+<th:block layout:fragment="script">
+	
+
+</th:block>

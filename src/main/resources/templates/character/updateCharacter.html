@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox">
+		
+		<img src="/img/maplelogo.jpg" alt="logo" class="logoImg">
+		
+			<div class="col-10 loginBox">
+				<div class="d-flex justify-content-center align-items-center">
+						<h1>캐릭터 추가</h1>
+				</div>
+				
+				<!-- 닉네임 -->
+				<div>
+					<div class="d-flex ml-5 ">
+						<span>닉네임</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input th:value="${character.name}"readonly type ="text" class="form form-control infoBoxUp" id="name" name="name" th:data-character-id="${character.id}">
+					</div>
+				</div>
+				
+				
+				<!-- 직업 -->
+				<div>
+					<div class="d-flex ml-5 ">
+						<span>직업</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input th:value="${character.characterClass}"readonly type ="text" class="form form-control infoBoxUp" id="characterClass" name="characterClass">
+					</div>
+				</div>
+				
+				<!-- 월드 -->
+				<div>
+					<div class="d-flex ml-5 ">
+						<span>월드</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input th:value="${character.world}"readonly type ="text" class="form form-control infoBoxUp" id="world" name="world">
+					</div>
+				</div>
+				
+				<!-- 레벨 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>레벨</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input th:value="${character.level}" type ="text" class="form form-control infoBoxUp" id="level" name="level" placeholder="레벨은 숫자만 입력하세요. ex) 252">
+					</div>
+				</div>
+				
+				
+				<!-- 전투력 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>전투력</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input th:value="${character.stat}" type ="text" class="form form-control infoBoxUp" id="stat" name="stat" placeholder="전투력은 억, 만 단위 외엔 숫자만 입력하세요. ex) 1억 200만 2343">
+					</div>
+				</div>
+				
+				<!-- 이미지 -->
+				<div>
+					<div class="d-flex ml-5">
+						<span>캐릭터 이미지</span>
+					</div>
+					<div class="d-flex justify-content-center my-3">
+						<input type ="text" id="imgName" class="form form-control infoBoxUp mx-3" th:value="${character.characterImg}">
+						<input type ="file" id="characterImg" accept=".jpg, .png">
+					</div>
+					
+					<div class="d-flex">
+						<div class="mr-5">
+							<div>이전 캐릭터 이미지</div>
+							<img th:src="${character.characterImg}" alt="캐릭터 이미지" width="100">
+						</div>
+					</div>
+					
+					
+				</div>
+				
+				<!-- 추가하기 버튼 -->
+				<div class="d-flex justify-content-center my-4">
+					<input type="submit" id="changeBtn" class="btn btn-danger" value="수정하기">
+				</div>
+				
+			</div>
+		
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	
+	<script>
+		$(document).ready(function(){
+			
+			
+			// 파일체크
+			$("#characterImg").on("change" , function(e){
+				
+				if(e.target.files[0] == null){
+					$("#characterImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				let fileName = e.target.files[0].name;
+				let ext = fileName.split(".").pop().toLowerCase();
+				
+				if (ext != "jpg" && ext != "png"){
+					alert("jpg, png 파일만 업로드 가능합니다.");
+					$("#characterImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				$("#imgName").val(fileName);
+				
+			});
+			
+			// 수정하기
+			$("#changeBtn").on("click" , function(e){
+				
+				e.preventDefault();
+				
+				//validation
+				let characterId = $("#name").data("character-id");
+				let name = $("#name").val().trim();
+				let level = $("#level").val();
+				let stat = $("#stat").val();
+				let file = $("#characterImg").val();
+				
+				
+				if (level == ""){
+					alert("레벨을 입력해주세요.");
+					return;
+				}
+				if (stat == ""){
+					alert("전투력을 입력해주세요.");
+					return;
+				}
+				if (stat == ""){
+					alert("캐릭터의 이미지를 첨부해주세요.");
+					return;
+				}
+				
+				if (file != ""){
+					let ext = file.split(".").pop().toLowerCase();
+					if (ext != "jpg" && ext != "png"){
+						alert("jpg, png 파일만 업로드 가능합니다.");
+						$("#characterImg").val("");
+						$("#imgName").val("");
+						return;
+					}
+				}
+				
+				let formData = new FormData();
+				formData.append("characterId" , characterId);
+				formData.append("name" , name);
+				formData.append("level" , level);
+				formData.append("stat" , stat);
+				if (file != ""){
+					formData.append("file" , $("#characterImg")[0].files[0]);
+				} else {
+					formData.append("file" , null);
+				}
+				
+				$.ajax({
+					type : "POST"
+					, url : "/character/update-character"
+					, data : formData
+					, enctype : "multipart/form-data"
+					, processData : false
+					, contentType : false
+					, success : function(data){
+						if (data.code == 206){
+							location.href = "/character/change-view";
+						} else if (data.code == 310){
+							alert(data.error_message);
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href = "/user/sign-in-view";
+						}
+					}
+					, error : function(e){
+						alert(data.error_message);
+					}
+				});
+				
+				
+			});
+			
+			
+		});
+	
+	
+	
+	</script>
+	
+
+</th:block>

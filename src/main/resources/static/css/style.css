@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+header {
+	height : 80px;
+	background : #F8E7E7;
+}
+
+footer {
+	height : 60px;
+	background : #FBF9F9;
+}
+
+
+.contents {
+	min-height : 500px;
+}
+
+
+.boardSection{
+	min-height : 500px;
+}
+
+.logo {
+	margin : 0;
+	padding : 0;
+}
+
+.logoImg {
+	height : 80px;
+	width : 150px;
+}
+
+.sectionBox {
+	width:800px;
+	margin-top:15px; 
+	margin-bottom : 15px;
+}
+
+.infoBox {
+	width:400px;
+	border-color: #F8E7E7;
+}
+
+.infoBoxUp {
+	width: 75%;
+	border-color: #F8E7E7;
+}
+
+.birthBox {
+	width:150px;
+	border-color: #F8E7E7;
+}
+
+.emailBox {
+	width:200px;
+	border-color: #F8E7E7;
+}
+
+.selectBox {
+	height : 40px;
+	width:150px;
+	border-color: #F8E7E7;
+}
+
+.idBox {
+	width:450px;
+	border-color: #F8E7E7;
+}
+
+.loginBox {
+	margin : 0 auto;
+}
+
+.infoTag > span > a {
+	color : black;
+	text-decoration : none;
+}
+
+.infoSection {
+	width : 800px;
+	height : 220px;
+	border-color: #F8E7E7;
+}
+
+.mapleInfoSection{
+	height : 220px;
+	border-color: #F8E7E7;
+}
+.myInfoBox {
+	border-color : #F8E7E7;
+	border-width : 4px;
+	font-size : 26px;
+	font-weight : bold;
+}
+
+.myInfoSection {
+	border : 2px solid #F8E7E7;
+}
+
+.myInfoDetailSection{
+	border-top : 2px solid #F8E7E7;
+}
+
+
+.searchBox::placeholder {
+	text-align:center;
+}
+
+
+.blankBox {
+	height: 50px;
+}
+
+.bossImg {
+	height : 300px;
+	width : 200px;
+	
+}
+
+.bossImgBox {
+	height : 400px;
+	width : 200px;
+}
+
+.btn-gradient.purple { 
+  background: rgba(203,153,197,1);
+  background: -moz-linear-gradient(top, rgba(203,153,197,1) 0%, rgba(181,134,176,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(203,153,197,1)), color-stop(100%, rgba(181,134,176,1)));
+  background: -webkit-linear-gradient(top, rgba(203,153,197,1) 0%, rgba(181,134,176,1) 100%);
+  background: -o-linear-gradient(top, rgba(203,153,197,1) 0%, rgba(181,134,176,1) 100%);
+  background: -ms-linear-gradient(top, rgba(203,153,197,1) 0%, rgba(181,134,176,1) 100%);
+  background: linear-gradient(to bottom, rgba(203,153,197,1) 0%, rgba(181,134,176,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cb99c5', endColorstr='#b586b0', GradientType=0 );
+}
+.btn-gradient {
+  text-decoration: none;
+  color: white;
+  padding: 10px 30px;
+  display: inline-block;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom: 4px solid rgba(0,0,0,0.21);
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}

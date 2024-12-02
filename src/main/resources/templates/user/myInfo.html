@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox mb-4">
+		<h2>마이 인포</h2>		
+		<!-- 캐릭터 조회 부분 -->
+		<div th:if="${exist != 0}" class="infoSection d-flex">
+			<!--  캐릭터 부분 -->
+			<div class="col-3">
+				<img th:src="${character.characterImg}" class="w-100 h-100">
+			</div>
+			<!--  캐릭터 설명 부분 -->
+			<div class="col-9 py-3">
+				<div class="mb-1">
+					<span class="font-weight-bold">닉네임 : </span>
+					<span th:text="${character.name}">닉네임</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">레벨 : </span>
+					<span th:text="${character.level}">레벨</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">직업 : </span>
+					<span th:text="${character.characterClass}">직업</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">월드명 : </span>
+					<span th:text="${character.world}">월드명</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">전투력 : </span>
+					<span th:text="${character.stat}">전투력</span>
+				</div>
+				<div class="mb-1">
+					<span class="font-weight-bold">랭킹 : </span>
+					<span th:text="${character.level}">랭킹</span>
+				</div>
+			</div>
+		</div>
+		
+		<div th:unless="${exist != 0}" class="d-flex justify-content-center">
+			<div class="font-weight-bold text-danger">대표 캐릭터가 존재하지 않습니다. 캐릭터 추가하기를 통해 등록해주세요.</div>
+		</div>
+		
+		
+		<!-- 정보관리 메뉴 -->
+		<div class="infoSection mt-5 d-flex justify-content-center">
+			<!--  정보관리 -->
+			<div class="col-4 myInfoSection">
+				<div class="myInfoBox h-25 d-flex justify-content-center align-items-center">정보관리</div>
+				<div class="h-75 ">
+					<div class="d-flex justify-content-center myInfoDetailSection py-2"><a href="/character/my-character-list-view" class="text-dark">대표 캐릭터 변경하기</a></div>
+					<div class="d-flex justify-content-center py-2"><a href="/character/change-view" class="text-dark">캐릭터 추가 / 정보 변경</a></div>
+					<div class="d-flex justify-content-center py-2"><a href="/user/change-pw-bypw-view" class="text-dark">비밀번호 변경하기</a></div>
+				</div>
+			</div>
+			<!--  보스모집 -->
+			<div class="col-4 myInfoSection">
+				<div class="myInfoBox h-25 d-flex justify-content-center align-items-center">보스 모집</div>
+				<div class="h-75">
+					<div class="d-flex justify-content-center py-2 myInfoDetailSection"><a href="/user/recruit-boss-view" class="text-dark">작성한 보스 모집 글 관리</a></div>
+					<div class="d-flex justify-content-center py-2"><a href="/user/apply-boss-view" class="text-dark">지원한 보스 모집 글 확인하기</a></div>
+				</div>
+			</div>
+			<!--  자유 / 직업 게시판 -->
+			<div class="col-4 myInfoSection">
+				<div class="myInfoBox h-25 d-flex justify-content-center align-items-center">자유 / 직업 게시판</div>
+				<div class="h-75">
+					<div class="d-flex justify-content-center py-2 myInfoDetailSection"><a href="/user/my-post-list-view" class="text-dark">작성한 게시글 관리</a></div>
+					<div class="d-flex justify-content-center py-2"><a href="/user/my-like-list-view" class="text-dark">좋아요 누른 게시글 모아보기</a></div>
+					<div class="d-flex justify-content-center py-2"><a href="/user/my-comment-list-view" class="text-dark">작성한 댓글 관리</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+
+    </script>
+</th:block>

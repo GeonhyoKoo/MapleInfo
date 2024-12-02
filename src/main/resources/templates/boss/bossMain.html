@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	
+		<div class="sectionBox">
+			<div class="d-flex justify-content-between mt-5">
+				<div class="bossImgBox"><a href="/boss/board?bossName=lucid"><img src="/img/maplelogo.jpg" id ="lucid" alt= "lucid" class="w-100"></a></div>
+				<div class="bossImgBox"><a href="#"><img src="/img/maplelogo.jpg" alt= "dusk" class="w-100"></a></div>
+				<div class="bossImgBox"><a href="#"><img src="/img/maplelogo.jpg" alt= "demian" class="w-100"></a></div>
+			</div>
+			<div class="d-flex justify-content-between mt-5">
+				<div class="bossImgBox"><a href="#"><img src="/img/maplelogo.jpg" class="w-100"></a></div>
+				<div class="bossImgBox"><a href="#"><img src="/img/maplelogo.jpg" class="w-100"></a></div>
+				<div class="bossImgBox"><a href="#"><img src="/img/maplelogo.jpg" class="w-100"></a></div>
+			</div>
+		
+		</div>
+		
+</section>
+
+<th:block layout:fragment="script">
+   
+</th:block>
