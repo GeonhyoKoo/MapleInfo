@@ -46,6 +46,11 @@ footer {
 	border-color: #F8E7E7;
 }
 
+.contentBox {
+	width : 75%;
+	border-color: #F8E7E7;
+}
+
 .birthBox {
 	width:150px;
 	border-color: #F8E7E7;

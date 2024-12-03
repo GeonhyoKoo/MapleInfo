@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapleinfo.freeboard.mapper.FreeBoardMapper">
+
+	<insert id="insertFreeBoard" parameterType="map">
+		iNSERT INTO `freeBoard`
+		(
+			`userId`
+			, `subject`
+			, `content`
+			, `imagePath`
+			, `createdAt`
+			, `updatedAt`
+		)
+		VALUES
+		(
+			#{userId}
+			, #{subject}
+			, #{content}
+			, #{imagePath}
+			, NOW()
+			, NOW()
+		)
+	</insert>
+
+	
+	<select id="selectFreeBoardList" resultType="com.mapleinfo.freeboard.domain.FreeBoard">
+		SELECT
+			`id`
+			, `userId`
+			, `subject`
+			, `content`
+			, `imagePath`
+			, `createdAt`
+			, `updatedAt`
+		FROM
+			`freeBoard`
+	</select>
+
+
+	<select id="selectFreeBoardByFreeBoardId" resultType="com.mapleinfo.freeboard.domain.FreeBoard" parameterType="int">
+		SELECT
+			`id`
+			, `userId`
+			, `subject`
+			, `content`
+			, `imagePath`
+			, `createdAt`
+			, `updatedAt`
+		FROM
+			`freeBoard`
+		WHERE
+			`id` = #{freeBoardId}
+	</select>
+
+</mapper>

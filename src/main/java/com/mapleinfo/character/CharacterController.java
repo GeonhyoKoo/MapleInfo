@@ -82,7 +82,6 @@ public class CharacterController {
 			) {
 		
 		Integer userId = (Integer)session.getAttribute("id");
-		String loginId = (String)session.getAttribute("loginId");
 		
 		if (userId == null) {
 			return "redirect:/user/sign-in-view";

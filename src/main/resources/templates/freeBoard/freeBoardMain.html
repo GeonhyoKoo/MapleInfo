@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="sectionBox mb-4">
+		<div class="d-flex justify-content-between mt-3">
+			<h3>자유 게시판</h3>
+			<a href="/freeboard/create-view" class="btn btn-outline-warning">글쓰기</a>
+		</div>
+	
+		<div class="mt-5">
+			<table class="table text-center">
+				<thead class="font-weight-bold">
+					<tr>
+						<td>No</td>
+						<td>작성자</td>
+						<td>제목</td>
+						<td>작성시간</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="freeBoard : ${freeBoardList}">
+						<td th:text="${freeBoard.id}">No</td>
+						<td th:text="${freeBoard.userId}">작성자</td>
+						<td><a th:href="|/freeboard/detail-view?freeBoardId=${freeBoard.id}|"  th:text="${freeBoard.subject}">제목</a></td>
+						<td th:text="${freeBoard.createdAt}">작성시간</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	
+</th:block>

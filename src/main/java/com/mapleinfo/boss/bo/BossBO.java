@@ -15,11 +15,13 @@ public class BossBO {
 
 	private final BossMapper bossMapper;
 	
-	// 보스 이름으로 게시글 조회
+	/**
+	 * 보스 이름으로 게시글 가져오기
+	 * @param bossName
+	 * @return
+	 */
 	public List<Boss> getBossBoardByBossName(String bossName){
-		
 		return bossMapper.selectBossBoardByBossName(bossName);
-		
 	}
 	
 	

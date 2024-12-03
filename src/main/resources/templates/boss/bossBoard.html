@@ -20,7 +20,7 @@
 			<div class="d-flex boardSection justify-content-center">
 				<div class="col-2 mt-3 p-0">
 					<img src="/img/maplelogo.jpg" class="bossImg">
-					<h3 class="text-center">보스 이름</h3>
+					<h3 class="text-center" th:text="${bossName}">보스 이름</h3>
 				</div>
 				<div class="col-10">
 					<div class="mt-5">
@@ -35,15 +35,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>No</td>
-									<td>제목</td>
-									<td>모집 월드</td>
-									<td>모집 전투력</td>
-									<td>상태</td>
+								<tr th:if="${bossBoard != null}" th:each="board : ${bossBoard}">
+									<td th:text="${board.id}">No</td>
+									<td th:text="${board.subject}">제목</td>
+									<td th:text="${board.world}">모집 월드</td>
+									<td th:text="${board.recommendStat}">모집 전투력</td>
+									<td th:text="${board.state}">상태</td>
 								</tr>
 							</tbody>
 						</table>
+						<div th:if="${bossBoard == null}" class="text-center text-danger">작성된 게시글이 존재하지 않습니다.</div>
 					</div>
 								
 				</div>

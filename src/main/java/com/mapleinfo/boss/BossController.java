@@ -35,7 +35,12 @@ public class BossController {
 			) {
 		
 		List<Boss> bossBoard = bossBO.getBossBoardByBossName(bossName);
-		model.addAttribute(bossBoard);
+		if(bossBoard.isEmpty()) {
+			bossBoard = null;
+		}
+		
+		model.addAttribute("bossBoard", bossBoard);
+		model.addAttribute("bossName", bossName);
 		
 		return "boss/bossBoard";
 	}
