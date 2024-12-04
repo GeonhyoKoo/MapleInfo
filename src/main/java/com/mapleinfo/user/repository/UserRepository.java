@@ -18,4 +18,8 @@ public interface UserRepository extends JpaRepository<UserEntity , Integer>{
 	// 비밀번호 찾기 -> 유저 정보 조회
 	public UserEntity findByNameAndLoginIdAndBirth(String name, String loginId, String Birth);
 	
+	// 유저 id 번호로 정보 가져오기
+	public UserEntity findById(int id);
+	
+	
 }

@@ -27,4 +27,16 @@ public interface FreeBoardMapper {
 	public FreeBoard selectFreeBoardByFreeBoardId(int freeBoardId);
 	
 	
+	// 글 삭제
+	public void deleteFreeBoard(int freeBoardId);
+	
+	
+	// 글 수정
+	public void updatePost(
+			@Param("boardId") int boardId,
+			@Param("subject") String subject,
+			@Param("content") String content,
+			@Param("imagePath") String imagePath
+			);
+	
 }

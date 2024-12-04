@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-100">
+		<div class="d-flex justify-content-between mt-3">
+				<h3>자유 게시판 글쓰기</h3>		
+		</div>
+				
+		<!-- 제목 -->
+		<div class="d-flex justify-content-center align-items-center my-3">
+			<span class="mr-3">제목</span>
+			<input th:value="${freeBoard.subject}" type ="text" class="form form-control infoBoxUp" id="subject" name="subject">
+		</div>
+		<!-- 내용 -->
+		<div class="d-flex justify-content-center align-items-center my-3">
+			<span class="mr-3">내용</span>
+			<textarea th:text="${freeBoard.content}" id="content" class="contentBox" rows="13"></textarea>
+		</div>		
+		
+		<!-- 이미지 -->
+		<div class="d-flex justify-content-center align-items-center my-3">
+			<span class="mr-3">이미지</span>
+			<div th:if="${freeBoard.imagePath != null}">
+				<img th:src="${freeBoard.imagePath}" width="200" alt="기존 이미지">
+			</div>
+			<div class="d-flex justify-content-center my-3">
+				<input type ="text" id="imgName" class="form form-control infoBoxUp mx-3">
+				<input type ="file" id="contentImg" accept=".jpg, .png">
+			</div>
+		</div>	
+				
+		<!-- 추가하기 버튼 -->
+		<div class="d-flex justify-content-center my-4">
+			<input type="button" id="updateBtn" class="btn btn-danger" th:data-freeboard-id="${freeBoard.id}" value="수정하기">
+		</div>
+				
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+
+	<script>
+	
+		$(document).ready(function(){
+			
+			// 파일체크
+			$("#contentImg").on("input" , function(e){
+				
+				if(e.target.files[0] == null){
+					$("#contentImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				let fileName = e.target.files[0].name;
+				
+				let ext = fileName.split(".").pop().toLowerCase();
+				
+				if (ext != "jpg" && ext != "png"){
+					alert("jpg, png 파일만 업로드 가능합니다.");
+					$("#contentImg").val("");
+					$("#imgName").val("");
+					return;
+				}
+				
+				$("#imgName").val(fileName);
+			});
+			
+			
+			// 작성하기
+			$("#updateBtn").on("click" , function(){
+				
+				let boardId = $(this).data("freeboard-id");
+				let subject = $("#subject").val();
+				let content = $("#content").val();
+				let file = $("#contentImg").val();
+				
+				if(subject == ""){
+					alert("제목을 입력해주세요.");
+					return;
+				}
+				if(content == ""){
+					alert("내용을 입력해주세요.");
+					return;
+				}
+				
+				let formData = new FormData();
+				formData.append("boardId" , boardId);
+				formData.append("subject" , subject);
+				formData.append("content" , content);
+				formData.append("file" , $("#contentImg")[0].files[0]);
+				
+				$.ajax({
+					type : "PUT"
+					, url : "/freeboard/update-board"
+					, data : formData
+					, enctype : "multipart/form-data"
+					, processData : false
+					, contentType : false
+					, success : function(data){
+						if (data.code == 201){
+							alert("수정되었습니다.");
+							location.reload(true);
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href = "/user/sign-in-view";
+						} else if (data.code == 301){
+							alert(data.error_message);
+						} else if(data.code == 306){
+							alert(data.error_message);
+						}
+					}
+					, error : function(e){
+						alert("글 수정에 실패했습니다. 관리자에게 문의해주세요.");
+					}
+					
+				});
+				
+				
+			});
+		});
+	
+	</script>
+
+
+</th:block>

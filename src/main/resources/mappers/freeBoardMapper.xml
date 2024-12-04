@@ -54,4 +54,28 @@
 			`id` = #{freeBoardId}
 	</select>
 
+
+	<delete id="deleteFreeBoard" parameterType="int">
+		DELETE
+		FROM 
+			`freeBoard`
+		WHERE 
+			`id` = #{freeBoardId}
+	
+	</delete>
+
+
+	<update id="updatePost" parameterType="map">
+		UPDATE `freeBoard`
+		SET
+			`subject` = #{subject}
+			, `content` = #{content}
+			<if test="imagePath != null">
+			, `imagePath` = #{imagePath}
+			</if>
+			, `updatedAt` = NOW()
+		WHERE
+			`id` = #{boardId}
+	</update>
+	
 </mapper>

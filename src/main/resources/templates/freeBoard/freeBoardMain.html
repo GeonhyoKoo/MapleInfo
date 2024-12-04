@@ -22,10 +22,10 @@
 				</thead>
 				<tbody>
 					<tr th:each="freeBoard : ${freeBoardList}">
-						<td th:text="${freeBoard.id}">No</td>
-						<td th:text="${freeBoard.userId}">작성자</td>
-						<td><a th:href="|/freeboard/detail-view?freeBoardId=${freeBoard.id}|"  th:text="${freeBoard.subject}">제목</a></td>
-						<td th:text="${freeBoard.createdAt}">작성시간</td>
+						<td th:text="${freeBoard.freeboard.id}">No</td>
+						<td th:text="${freeBoard.user.loginId}">작성자</td>
+						<td><a th:href="|/freeboard/detail-view?freeBoardId=${freeBoard.freeboard.id}|"  th:text="${freeBoard.freeboard.subject}">제목</a></td>
+						<td th:text="${freeBoard.freeboard.createdAt}">작성시간</td>
 					</tr>
 				</tbody>
 			</table>

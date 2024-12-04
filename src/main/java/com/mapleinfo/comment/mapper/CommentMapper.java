@@ -24,5 +24,13 @@ public interface CommentMapper {
 			@Param("boardId") int boardId
 			);
 	
+	public Comment selectComment(int commentId);
+	
+	public void deleteComment(int commentId);
+	
+	public void deleteCommentList(
+			@Param("type") String type,
+			@Param("boardId") int boardId
+			);
 	
 }

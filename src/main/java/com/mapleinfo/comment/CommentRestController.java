@@ -3,6 +3,8 @@ package com.mapleinfo.comment;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +22,14 @@ public class CommentRestController {
 
 	private final CommentBO commentBO;
 	
-	
+	/**
+	 * 댓글 작성
+	 * @param session
+	 * @param boardId
+	 * @param content
+	 * @param type
+	 * @return
+	 */
 	@PostMapping("/create-comment")
 	public Map<String , Object> createComment(
 			HttpSession session,
@@ -54,6 +63,38 @@ public class CommentRestController {
 	}
 	
 	
+	
+	// 댓글 삭제
+	@DeleteMapping("/delete/{commentId}")
+	public Map<String, Object> deleteComment(
+			HttpSession session,
+			@PathVariable(name = "commentId") int commentId
+			){
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		Integer userId = (Integer)session.getAttribute("id");
+		userId = (int)userId;
+ 		if(userId == null) {
+			result.put("code", 300);
+			result.put("error_message", "로그인 후 이용 가능한 서비스입니다. 로그인 해주세요.");
+			return result;
+		}
+		
+		int resultState = commentBO.deleteComment(userId, commentId);
+		if(resultState == -1) {
+			result.put("code", 320);
+			result.put("error_message", "댓글 삭제 실패했습니다.");
+			return result;
+		}
+		
+		result.put("code", 210);
+		result.put("result", "댓글 삭제에 성공했습니다.");
+		
+		
+		return result;
+		
+	}
 	
 	
 }

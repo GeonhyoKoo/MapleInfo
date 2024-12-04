@@ -13,43 +13,52 @@
 		<!-- 제목 -->
 		<div class="d-flex align-items-center my-3">
 			<span class="mr-3 font-weight-bold">제목</span>
-			<span th:text="${freeBoard.subject}"></span>
+			<span th:text="${freeBoard.freeboard.subject}"></span>
 		</div>
 		<!-- 내용 -->
 		<div class="d-flex align-items-center my-3">
 			<span class="mr-3 font-weight-bold">내용</span>
-			<span th:text="${freeBoard.content}"></span>
+			<span th:text="${freeBoard.freeboard.content}"></span>
 		</div>		
 		
 		<!-- 이미지 -->
-		<div class="d-flex align-items-center my-3" th:if="${freeBoard.imagePath} != null">
-				<img th:src="${freeBoard.imagePath}" alt="freeBoardImage">
+		<div class="d-flex align-items-center my-3" th:if="${freeBoard.freeboard.imagePath} != null">
+				<img th:src="${freeBoard.freeboard.imagePath}" alt="freeBoardImage">
 		</div>	
 		
 		<!-- 수정하기, 삭제하기 버튼 -->
-		<div class="d-flex justify-content-end my-4" th:if="${session.id == freeBoard.userId}">
-			<input type="button" id="updateBtn" class="btn btn-warning mr-3" th:data-freeboard-id="${freeBoard.id}" value="수정하기">
-			<input type="button" id="deleteBtn" class="btn btn-danger ml-3" th:data-freeboard-id="${freeBoard.id}" value="삭제하기">
+		<div class="d-flex justify-content-end my-4" th:if="${session.id == freeBoard.freeboard.userId}">
+			<a th:href="|/freeboard/update/${freeBoard.freeboard.id}|" class="btn btn-warning">수정하기</a>
+			<input type="button" id="deleteBtn" class="btn btn-danger ml-3" th:data-freeboard-id="${freeBoard.freeboard.id}" value="삭제하기">
 		</div>
 		
 		<!--  좋아요 -->
-		<div class="d-flex justify-content-center my-4" th:if="${session.id != freeBoard.userId}">
-			<a href="#" class="likeBtn" th:data-post-id="${freeBoard.id}">
+		<div class="d-flex justify-content-center my-4">
+			<a href="#" class="likeBtn" th:data-freeboard-id="${freeBoard.freeboard.id}" th:if="!${freeBoard.isLike}">
 				<img src="/img/heartEmpty.png" width="18" height="18" alt="empty heart">
 			</a>
-			<span class="ml-3">좋아요 0개</span>
+			<a href="#" class="likeBtn" th:data-freeboard-id="${freeBoard.freeboard.id}" th:if="${freeBoard.isLike}">
+				<img src="/img/heartFull.png" width="18" height="18" alt="full heart">
+			</a>
+			
+			<span class="ml-3" th:text="|좋아요 ${freeBoard.likeCount}개|">좋아요 0개</span>
 		</div>
 		
 		<!-- 댓글 -->
-		<div class="d-flex align-items-center my-3" th:each="comment : ${commentList}">
-			<span class="mr-3 font-weight-bold" th:text="${comment.userId}">댓글 작성자</span>
-			<span class="mr-3" th:text="${comment.content}">댓글 내용</span>
+		<div class="d-flex align-items-center my-3" th:each="comment : ${freeBoard.commentList}">
+			<span class="mr-3 font-weight-bold" th:text="${comment.user.loginId}">댓글 작성자</span>
+			<span class="mr-3" th:text="${comment.comment.content}">댓글 내용</span>
+			
+			<a href="#" th:if="${session.id == comment.comment.userId}" class="deleteCommentBtn" th:data-comment-id="${comment.comment.id}">
+				<img src="/img/x-icon.png" width="10" height="10">
+			</a>
+			
 		</div>
 		
 		<!--  댓글 작성하기 -->
 		<div class="d-flex align-items-center my-3">
 			<input type="text" id="content" class="form form-control infoBoxUp" placeholder="댓글 내용을 입력하세요.">
-			<input type="button" id="createComment" class="btn btn-outline-success ml-3" th:data-freeboard-id="${freeBoard.id}" value="작성"> 
+			<input type="button" id="createComment" class="btn btn-outline-success ml-3" th:data-freeboard-id="${freeBoard.freeboard.id}" value="작성"> 
 		</div>
 		
 		
@@ -95,7 +104,89 @@
 			
 			
 			// 좋아요 토글
+			$(".likeBtn").on("click" , function(e){
+				
+				e.preventDefault();
+				
+				let boardId = $(this).data("freeboard-id");
+				let type = "자유";
+				
+				$.ajax({
+					type : "POST"
+					, url : "/like"
+					, data : {"boardId" : boardId , "type" : type}
+					, success : function(data){
+						if(data.code == 206){
+							location.reload(true);
+						} else if (data.code == 315){
+							alert(data.error_message);
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href="/user/sign-in-view";
+						}
+					}
+					, error : function(e){
+						alert("좋아요에 실패했습니다. 관리자에게 문의해주세요.");
+					}
+					
+				});
+			});
 			
+			
+			
+			// 댓글 삭제
+			$(".deleteCommentBtn").on("click" , function(e){
+				
+				e.preventDefault();
+				let commentId = $(this).data("comment-id");
+
+				$.ajax({
+					type : "DELETE"
+					,url : "/comment/delete/" + commentId
+					, success : function(data){
+						if(data.code == 210){
+							location.reload(true);
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href="/user/sign-in-view";
+						} else if (data.code == 320){
+							alert(data.error_message);
+						}
+					}
+					, error : function(e){
+						alert("댓글 삭제에 실패했습니다. 관리자에게 문의해주세요.");
+					}
+				});
+				
+				
+			});
+			
+			
+			
+			// 글 삭제하기
+			$("#deleteBtn").on("click" , function(){
+				
+				let boardId = $(this).data("freeboard-id");
+				
+				$.ajax({
+					type : "DELETE"
+					, url : "/freeboard/delete/" + boardId
+					, success : function(data){
+						if(data.code == 210){
+							location.href = "/freeboard/board-list-view"
+						} else if (data.code == 300){
+							alert(data.error_message);
+							location.href="/user/sign-in-view";
+						} else if (data.code == 320){
+							alert(data.error_message);
+						}
+					}
+					, error : function(e){
+						alert("글 삭제에 실패했습니다. 관리자에게 문의해주세요.");
+					}
+				});
+				
+			});
 			
 			
 		});

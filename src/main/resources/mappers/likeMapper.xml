@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapleinfo.like.mapper.LikeMapper">
+
+
+	<!--  좋아요 내가 체킹을 위해 -->
+	<select id="selectLikeCountByTypeAndBoardIdAndUserId" parameterType="map">
+		SELECT
+			COUNT(*)
+		FROM
+			`like`
+		WHERE
+			`type` = #{type} AND
+			`boardId` = #{boardId} AND
+			`userId` = #{userId}
+	</select>
+
+
+	<!--  좋아요 갯수체킹 위해 -->
+	<select id="selectLikeCountByTypeAndBoardId" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			`like`
+			`like`
+		WHERE
+			`type` = #{type} AND
+			`boardId` = #{boardId}
+	</select>
+	
+	
+	
+	<insert id="insertLike" parameterType="map">
+		INSERT INTO `like`
+		(
+			`type`
+			, `boardId`
+			, `userId`
+			, `createdAt`
+		)
+		VALUES
+		(
+			#{type}
+			, #{boardId}
+			, #{userId}
+			, NOW()
+		)
+	</insert>
+
+	<delete id="deleteLike" parameterType="map">
+		DELETE
+		FROM
+			`like`
+		WHERE
+			`type` = #{type} AND
+			`boardId` = #{boardId} AND
+			`userId` = #{userId}
+	</delete>
+	
+	<delete id="deleteLikeList" parameterType="map">
+		DELETE
+		FROM
+			`like`
+		WHERE
+			`type` = #{type} AND
+			`boardId` = #{boardId}
+	</delete>
+
+
+
+</mapper>

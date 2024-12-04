@@ -39,5 +39,38 @@
 		WHERE `type` = #{type} AND `boardId` = #{boardId}
 	
 	</select>
+	
+	
+	<select id="selectComment" resultType="com.mapleinfo.comment.domain.Comment">
+		SELECT
+			`id`
+			,`type`
+			,`boardId`
+			,`userId`
+			,`content`
+			,`createdAt`
+			,`updatedAt`
+		FROM
+			`comment`
+		WHERE 
+			`id` = #{commentId}
+	</select>
+
+	<delete id="deleteComment">
+		DELETE 
+		FROM
+			`comment`
+		WHERE
+			`id` = #{commentId}	
+	</delete>
+	
+	<delete id="deleteCommentList" parameterType="map">
+		DELETE 
+		FROM
+			`comment`
+		WHERE
+			`type` = #{type} AND
+			`boardId` = #{boardId}	
+	</delete>
 
 </mapper>
