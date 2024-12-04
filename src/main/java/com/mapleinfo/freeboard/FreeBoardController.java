@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mapleinfo.comment.bo.CommentBO;
-import com.mapleinfo.comment.domain.Comment;
 import com.mapleinfo.freeboard.bo.FreeBoardBO;
 import com.mapleinfo.freeboard.domain.FreeBoard;
 import com.mapleinfo.freeboard.domain.FreeBoardDTO;

@@ -32,7 +32,7 @@ public interface FreeBoardMapper {
 	
 	
 	// 글 수정
-	public void updatePost(
+	public void updateFreeBoard(
 			@Param("boardId") int boardId,
 			@Param("subject") String subject,
 			@Param("content") String content,

@@ -146,7 +146,7 @@ public class FreeBoardBO {
 			}
 		}
 		
-		freeBoardMapper.updatePost(boardId, subject, content, imagePath);
+		freeBoardMapper.updateFreeBoard(boardId, subject, content, imagePath);
 		
 		return 0;
 	}

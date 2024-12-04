@@ -74,12 +74,12 @@ public class CommentRestController {
 		Map<String, Object> result = new HashMap<>();
 		
 		Integer userId = (Integer)session.getAttribute("id");
-		userId = (int)userId;
- 		if(userId == null) {
+ 		if(userId == null){
 			result.put("code", 300);
 			result.put("error_message", "로그인 후 이용 가능한 서비스입니다. 로그인 해주세요.");
 			return result;
 		}
+ 		userId = (int)userId;
 		
 		int resultState = commentBO.deleteComment(userId, commentId);
 		if(resultState == -1) {

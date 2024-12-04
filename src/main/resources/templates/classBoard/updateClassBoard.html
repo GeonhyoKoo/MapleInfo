@@ -7,25 +7,32 @@
 <section layout:fragment="content" class="contents d-flex justify-content-center">
 	<div class="w-100">
 		<div class="d-flex justify-content-between mt-3">
-				<h3>자유 게시판 수정하기</h3>		
+				<h3>직업 게시판 글 수정하기</h3>		
+		</div>
+				
+				
+		<!-- 직업 -->
+		<div class="d-flex justify-content-center align-items-center my-3">
+			<span class="mr-3">직업</span>
+			<input th:value="${classBoard.characterClass}"readonly type ="text" class="form form-control infoBoxUp" id="characterClass">
 		</div>
 				
 		<!-- 제목 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3">제목</span>
-			<input th:value="${freeBoard.subject}" type ="text" class="form form-control infoBoxUp" id="subject" name="subject">
+			<input th:value="${classBoard.subject}" type ="text" class="form form-control infoBoxUp" id="subject" name="subject">
 		</div>
 		<!-- 내용 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3">내용</span>
-			<textarea th:text="${freeBoard.content}" id="content" class="contentBox" rows="13"></textarea>
+			<textarea th:text="${classBoard.content}" id="content" class="contentBox" rows="13"></textarea>
 		</div>		
 		
 		<!-- 이미지 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3">이미지</span>
-			<div th:if="${freeBoard.imagePath != null}">
-				<img th:src="${freeBoard.imagePath}" width="200" alt="기존 이미지">
+			<div th:if="${classBoard.imagePath != null}">
+				<img th:src="${classBoard.imagePath}" width="200" alt="기존 이미지">
 			</div>
 			<div class="d-flex justify-content-center my-3">
 				<input type ="text" id="imgName" class="form form-control infoBoxUp mx-3">
@@ -35,7 +42,7 @@
 				
 		<!-- 추가하기 버튼 -->
 		<div class="d-flex justify-content-center my-4">
-			<input type="button" id="updateBtn" class="btn btn-danger" th:data-freeboard-id="${freeBoard.id}" value="수정하기">
+			<input type="button" id="updateBtn" class="btn btn-danger" th:data-classboard-id="${classBoard.id}" value="수정하기">
 		</div>
 				
 	</div>
@@ -74,7 +81,8 @@
 			// 작성하기
 			$("#updateBtn").on("click" , function(){
 				
-				let boardId = $(this).data("freeboard-id");
+				let boardId = $(this).data("classboard-id");
+				let type = $("#characterClass").val();
 				let subject = $("#subject").val();
 				let content = $("#content").val();
 				let file = $("#contentImg").val();
@@ -90,13 +98,14 @@
 				
 				let formData = new FormData();
 				formData.append("boardId" , boardId);
+				formData.append("type" , type);
 				formData.append("subject" , subject);
 				formData.append("content" , content);
 				formData.append("file" , $("#contentImg")[0].files[0]);
 				
 				$.ajax({
 					type : "PUT"
-					, url : "/freeboard/update-board"
+					, url : "/classboard/update-board"
 					, data : formData
 					, enctype : "multipart/form-data"
 					, processData : false

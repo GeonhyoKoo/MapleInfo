@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mapleinfo.freeboard.mapper.FreeBoardMapper">
+<mapper namespace="com.mapleinfo.classboard.mapper.ClassBoardMapper">
 
-	<insert id="insertFreeBoard" parameterType="map">
-		iNSERT INTO `freeBoard`
+	<insert id="insertClassBoard" parameterType="map">
+		iNSERT INTO `classBoard`
 		(
 			`userId`
+			, `characterClass`
 			, `subject`
 			, `content`
 			, `imagePath`
@@ -16,6 +17,7 @@
 		VALUES
 		(
 			#{userId}
+			, #{characterClass}
 			, #{subject}
 			, #{content}
 			, #{imagePath}
@@ -24,49 +26,52 @@
 		)
 	</insert>
 
-	
-	<select id="selectFreeBoardList" resultType="com.mapleinfo.freeboard.domain.FreeBoard">
-		SELECT
+
+
+	<select id="selectClassBoardList" resultType="com.mapleinfo.classboard.domain.ClassBoard">
+		SELECT 
 			`id`
-			, `userId`
+			,`userId`
+			, `characterClass`
 			, `subject`
 			, `content`
 			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		FROM
-			`freeBoard`
+			`classBoard`
 	</select>
-
-
-	<select id="selectFreeBoardByFreeBoardId" resultType="com.mapleinfo.freeboard.domain.FreeBoard" parameterType="int">
-		SELECT
+	
+	
+	<select id="selectClassBoardByClassBoardId" resultType="com.mapleinfo.classboard.domain.ClassBoard" parameterType="int">
+		SELECT 
 			`id`
-			, `userId`
+			,`userId`
+			, `characterClass`
 			, `subject`
 			, `content`
 			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		FROM
-			`freeBoard`
+			`classBoard`
 		WHERE
-			`id` = #{freeBoardId}
+			`id` = #{classBoardId}
 	</select>
-
-
-	<delete id="deleteFreeBoard" parameterType="int">
-		DELETE
-		FROM 
-			`freeBoard`
-		WHERE 
-			`id` = #{freeBoardId}
 	
+	
+	
+	<delete id="deleteClassBoard" parameterType="int">
+		DELETE
+		FROM
+			`classBoard`
+		WHERE
+			`id` = #{classBoardId}
 	</delete>
-
-
-	<update id="updateFreeBoard" parameterType="map">
-		UPDATE `freeBoard`
+	
+	
+	<update id="updateClassBoard" parameterType="map">
+		UPDATE `classBoard`
 		SET
 			`subject` = #{subject}
 			, `content` = #{content}
@@ -77,5 +82,6 @@
 		WHERE
 			`id` = #{boardId}
 	</update>
-	
+
+	 
 </mapper>
