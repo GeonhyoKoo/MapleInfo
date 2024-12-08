@@ -6,18 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.mapleinfo.freeboard.domain.FreeBoard;
+import com.mapleinfo.paging.BoardPage;
 
 @Mapper
 public interface FreeBoardMapper {
 
 	
 	// 자유 게시판 글 쓰기
-	public int insertFreeBoard(
-			@Param("userId") int userId,
-			@Param("subject") String subject,
-			@Param("content") String content,
-			@Param("imagePath") String imagePath
-			);
+	public int insertFreeBoard(FreeBoard freeboard);
 	
 	
 	// 자유 게시판 글들 가져오기 
@@ -38,5 +34,11 @@ public interface FreeBoardMapper {
 			@Param("content") String content,
 			@Param("imagePath") String imagePath
 			);
+	
+	
+	///////////
+	
+	public List<FreeBoard> getListPaging(BoardPage boardPage);
+	
 	
 }

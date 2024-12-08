@@ -14,7 +14,6 @@ public class ClassBoard {
 	private String characterClass;
 	private String subject;
 	private String content;
-	private String imagePath;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	

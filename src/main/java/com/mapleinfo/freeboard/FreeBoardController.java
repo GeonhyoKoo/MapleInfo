@@ -9,34 +9,37 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mapleinfo.comment.bo.CommentBO;
 import com.mapleinfo.freeboard.bo.FreeBoardBO;
 import com.mapleinfo.freeboard.domain.FreeBoard;
 import com.mapleinfo.freeboard.domain.FreeBoardDTO;
-import com.mapleinfo.like.bo.LikeBO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/freeboard")
 @RequiredArgsConstructor
 public class FreeBoardController {
 
 	private final FreeBoardBO freeBoardBO;
-	private final CommentBO commentBO;
-	private final LikeBO likeBO;
+	
+	
 	
 	// 자유 게시판 메인 화면
 	@GetMapping("/board-list-view")
 	public String boardList(
-			Model model
+			Model model,
+			@RequestParam(value = "prevId", required = false) Integer prevId,
+			@RequestParam(value = "nextId", required = false) Integer nextId
 			) {
 		
 //		List<FreeBoard> freeBoardList = freeBoardBO.getFreeBoardList();
 //		model.addAttribute("freeBoardList", freeBoardList);
 		
 		List<FreeBoardDTO> freeBoardList = freeBoardBO.generateFreeBoardList();
+		
 		model.addAttribute("freeBoardList", freeBoardList);
 		
 		return "freeboard/freeBoardMain";
@@ -115,6 +118,17 @@ public class FreeBoardController {
 		
 		return "freeBoard/updateFreeBoard";
 	}
+	
+	
+	
+	// test
+	@GetMapping("/test-view")
+	public String testView() {
+		return "freeBoard/testFreeBoard";
+	}
+	
+	
+	
 	
 	
 }

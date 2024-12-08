@@ -36,7 +36,6 @@ public class FreeBoardRestController {
 			){
 		
 		Map<String , Object> result = new HashMap<>();
-		
 		Integer userId = (Integer)session.getAttribute("id");
 		String loginId = (String)session.getAttribute("loginId");
 		if(userId == null) {
@@ -59,7 +58,6 @@ public class FreeBoardRestController {
 			result.put("code", 310);
 			result.put("error_message", "게시글 작성에 실패했습니다.");
 		}
-		
 		
 		return result;
 	}
@@ -130,5 +128,27 @@ public class FreeBoardRestController {
 		
 		return result;
 	}
+	
+	
+	// 다중 파일 테스트
+	@PostMapping("/test")
+	public Map<String, Object> test(
+			HttpSession session,
+			@RequestParam("subject") String subject,
+			@RequestParam(name = "files[]", required = false) MultipartFile[] files
+			){
+		
+		Map<String , Object> result = new HashMap<>();
+		
+		 for(MultipartFile file : files) {
+	            // 파일 처리 로직
+	            System.out.println("파일 이름: " + file.getOriginalFilename());
+	            System.out.println("파일 이름: " + file);
+	            // 파일 저장하거나 기타 필요한 작업을 수행
+		 }
+		 
+		return result;
+	}
+	
 	
 }

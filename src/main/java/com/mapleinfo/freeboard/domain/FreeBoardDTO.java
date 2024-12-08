@@ -2,6 +2,7 @@ package com.mapleinfo.freeboard.domain;
 
 import java.util.List;
 
+import com.mapleinfo.boardImg.domain.BoardImg;
 import com.mapleinfo.comment.domain.CommentDTO;
 import com.mapleinfo.user.entity.UserEntity;
 
@@ -15,6 +16,8 @@ public class FreeBoardDTO {
 	private UserEntity user;
 	
 	private FreeBoard freeboard;
+	
+	private List<BoardImg> boardImg;
 	
 	private List<CommentDTO> commentList;
 	

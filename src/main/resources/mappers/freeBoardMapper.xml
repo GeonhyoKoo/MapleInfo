@@ -3,13 +3,12 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapleinfo.freeboard.mapper.FreeBoardMapper">
 
-	<insert id="insertFreeBoard" parameterType="map">
+	<insert id="insertFreeBoard" parameterType="com.mapleinfo.freeboard.domain.FreeBoard" useGeneratedKeys="true" keyProperty="id">
 		iNSERT INTO `freeBoard`
 		(
 			`userId`
 			, `subject`
 			, `content`
-			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		)
@@ -18,7 +17,6 @@
 			#{userId}
 			, #{subject}
 			, #{content}
-			, #{imagePath}
 			, NOW()
 			, NOW()
 		)
@@ -77,5 +75,33 @@
 		WHERE
 			`id` = #{boardId}
 	</update>
+	
+	
+	
+	
+	<select id="getListPaging" resultType="com.mapleinfo.freeboard.domain.FreeBoard">
+		SELECT
+			`id`,
+			`userId`,
+			`subject`,
+			`content`,
+			`imagePath`,
+			`createdAt`,
+			`updatedAt`
+		FROM `freeBoard`
+		ORDER BY `id` DESC
+		LIMIT #{skip} , #{amount}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 </mapper>

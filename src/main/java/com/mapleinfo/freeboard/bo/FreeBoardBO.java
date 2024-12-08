@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mapleinfo.boardImg.bo.BoardImgBO;
 import com.mapleinfo.comment.bo.CommentBO;
 import com.mapleinfo.common.FileManagerService;
 import com.mapleinfo.freeboard.domain.FreeBoard;
@@ -25,16 +26,27 @@ public class FreeBoardBO {
 	private final UserBO userBO;
 	private final CommentBO commentBO;
 	private final LikeBO likeBO;
+	private final BoardImgBO boardImgBO;
 	
 	// 자유 게시판 글 작성
 	public int addFreeBoard(int userId, String loginId,  String subject , String content, MultipartFile file) {
 		
 		String imagePath = null;
+		FreeBoard freeboard = new FreeBoard();
+		freeboard.setUserId(userId);
+		freeboard.setContent(content);
+		freeboard.setSubject(subject);;
+		
 		if(file != null) {
 			imagePath = fileManager.uploadFile(loginId, file);
+			freeBoardMapper.insertFreeBoard(freeboard);
+			int boardId = freeboard.getId();
+			boardImgBO.addBoardImg("자유" , boardId , imagePath);
+			return 1;
+		} else {
+			freeBoardMapper.insertFreeBoard(freeboard);
+			return 1;
 		}
-		
-		return freeBoardMapper.insertFreeBoard(userId, subject, content, imagePath);
 	}
 	
 	
@@ -43,6 +55,7 @@ public class FreeBoardBO {
 	public List<FreeBoard> getFreeBoardList(){
 		return freeBoardMapper.selectFreeBoardList();
 	}
+	
 	
 	
 	// 글 하나 가져오기
@@ -150,6 +163,8 @@ public class FreeBoardBO {
 		
 		return 0;
 	}
+	
+	
 	
 	
 }

@@ -15,11 +15,7 @@
 			<span class="mr-3">제목</span>
 			<input type ="text" class="form form-control infoBoxUp" id="subject" name="subject" placeholder="제목을 입력하세요.">
 		</div>
-		<!-- 내용 -->
-		<div class="d-flex justify-content-center align-items-center my-3">
-			<span class="mr-3">내용</span>
-			<textarea id="content" class="contentBox" rows="13" placeholder="내용을 입력하세요."></textarea>
-		</div>		
+			
 		
 		<!-- 이미지 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
@@ -32,7 +28,7 @@
 				
 		<!-- 추가하기 버튼 -->
 		<div class="d-flex justify-content-center my-4">
-			<input type="button" id="createBtn" class="btn btn-danger" th:data-user-id="${userId}" value="추가하기">
+			<input type="button" id="createBtn" class="btn btn-danger" value="추가하기">
 		</div>
 				
 	</div>
@@ -44,74 +40,33 @@
 	
 		$(document).ready(function(){
 			
-			// 파일체크
-			$("#contentImg").on("input" , function(e){
-				
-				if(e.target.files[0] == null){
-					$("#contentImg").val("");
-					$("#imgName").val("");
-					return;
-				}
-				
-				let fileName = e.target.files[0].name;
-				
-				let ext = fileName.split(".").pop().toLowerCase();
-				
-				if (ext != "jpg" && ext != "png"){
-					alert("jpg, png 파일만 업로드 가능합니다.");
-					$("#contentImg").val("");
-					$("#imgName").val("");
-					return;
-				}
-				
-				$("#imgName").val(fileName);
-			});
-			
 			
 			// 작성하기
 			$("#createBtn").on("click" , function(){
 				
-				let userId = $(this).data("user-id");
 				let subject = $("#subject").val().trim();
-				let content = $("#content").val();
-				let file = $("#contentImg").val();
 				
-				
-				if(subject == ""){
-					alert("제목을 입력해주세요.");
-					return;
-				}
-				if(content == ""){
-					alert("내용을 입력해주세요.");
-					return;
-				}
 				
 				let formData = new FormData();
-				formData.append("userId" , userId);
 				formData.append("subject" , subject);
-				formData.append("content" , content);
-				formData.append("file" , $("#contentImg")[0].files[0]);
+
+				
+				let files = $("#contentImg")[0].files;
+				for(let i = 0; i < files.length; i++){
+					formData.append("files[]" , files[i]);
+					console.log(files[i]);
+				}
 				
 				
 				$.ajax({
 					type : "POST"
-					, url : "/freeboard/create-board"
+					, url : "/freeboard/test"
 					, data : formData
 					, enctype : "multipart/form-data"
 					, processData : false
 					, contentType : false
 					, success : function(data){
-						if (data.code == 201){
-							alert("작성되었습니다.");
-							location.href = "/freeboard/board-list-view";
-						} else if (data.code == 300){
-							alert(data.error_message);
-							location.href = "/user/sign-in-view";
-						} else if (data.code == 301){
-							alert(data.error_message);
-						} else if (data.code == 310){
-							alert(data.error_message);
-						}
+						alert(data.code);
 					}
 					, error : function(e){
 						alert("글 작성에 실패했습니다. 관리자에게 문의해주세요.");
