@@ -31,8 +31,7 @@ public interface FreeBoardMapper {
 	public void updateFreeBoard(
 			@Param("boardId") int boardId,
 			@Param("subject") String subject,
-			@Param("content") String content,
-			@Param("imagePath") String imagePath
+			@Param("content") String content
 			);
 	
 	

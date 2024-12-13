@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-100">
+		<div class="d-flex justify-content-between mt-3">
+				<h3>직업 게시판 글쓰기</h3>		
+		</div>
+		
+		
+		<!--  form -->
+		<form method="post"  action="/classboard/create-board" id="boardForm" enctype="multipart/form-data">
+			<!-- 직업 -->
+			<div class="d-flex justify-content-center align-items-center my-3">
+				<span class="mr-3">직업</span>
+				<select id="characterClass" name="characterClass" class="selectBox mx-3 w-50">
+								<option value="전사">전사</option>
+								<option value="마법사">마법사</option>
+								<option value="궁수">궁수</option>
+								<option value="도적">도적</option>
+								<option value="해적">해적</option>
+							</select>
+			</div>
+					
+			<!-- 제목 -->
+			<div class="d-flex justify-content-center align-items-center my-3">
+				<span class="mr-3">제목</span>
+				<input type ="text" class="form form-control infoBoxUp" id="subject" name="subject" placeholder="제목을 입력하세요.">
+			</div>
+			<!-- 내용 -->
+			<div class="d-flex justify-content-center align-items-center my-3">
+				<span class="mr-3">내용</span>
+				<textarea id="summernote" name="content" class="contentBox"></textarea>
+			</div>		
+			
+					
+			<!-- 추가하기 버튼 -->
+			<div class="d-flex justify-content-center my-4">
+				<input type="submit" id="createBtn" class="btn btn-danger" th:data-user-id="${userId}" value="추가하기">
+			</div>
+		</form>	
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+
+	<script>
+		
+		// 추가되는 이미지 배열로 추가해두기
+		var imageArr = new Array();
+		// 섬머 노트
+		$(document).ready(function(){
+			
+			// 섬머 노트 설정
+			$("#summernote").summernote({
+	            codeviewFilter: false,                              // 코드 보기 필터 비활성화
+	            codeviewIframeFilter: false,                        // 코드 보기 iframe 필터 비활성화
+	            height: 400,                                        // 에디터 높이
+	            minHeight: null,                                    // 최소 높이
+	            maxHeight: null,                                    // 최대 높이
+	            lang: "ko-KR",                                      // 에디터 한글 설정
+	            focus : true,                                       // 에디터 포커스 설정
+	            toolbar: [
+	                ['fontname', ['fontname']],                     // 글꼴 설정
+	                ['fontsize', ['fontsize']],                     // 글자 크기
+	                ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],  // 글자 스타일 설정
+	                ['color', ['forecolor','color']],               // 글자색
+	                ['table', ['table']],                           // 표 생성
+	                ['insert', ['picture', 'link']],        		// 이미지, 링크
+	                ['para', ['ul', 'ol', 'paragraph']],            // 문단 스타일 설정
+	                ['height', ['height']],                         // 줄간격
+	                ['view', ['codeview','fullscreen', 'help']]     // 코드보기, 전체화면, 도움말
+	            ],
+	            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'], // 추가한 글꼴
+	            fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'], // 추가한 폰트사이즈
+	            callbacks : {
+	            	
+	                // 파일 업로드
+	                onImageUpload : function (files) {
+	                    for(let i=0; i < files.length; i++){
+	                        // 이미지가 여러개일 경우
+	                        imageUpload(files[i] , this);
+	                    }
+	                },
+	                
+	                // 파일 삭제
+	                onMediaDelete: function ($target){
+	                    if(confirm("이미지를 삭제하시겠습니까?")){
+	                        let fileName = $target.attr('src').split('/').pop();
+	                        deleteFile(fileName);
+	                    }
+	                }
+	            }
+	        });	 
+			 
+			
+			// 이미지 temp 업로드
+	    	function imageUpload(file , el){
+	    	    let formData = new FormData();
+	    	    formData.append("file", file);
+
+	    	    $.ajax({
+	    	       url : "/upload/imageUpload",
+	    	       type : "POST",
+	    	       data : formData,
+	    	       contentType: false,
+	    	       processData: false,
+	    	       encType : "multipart/form-data",
+	    	       success : function (data) {
+	    	           if(data.code == 200){
+	    	        	   $(el).summernote('editor.insertImage', data.url, function ($image){});
+	    	        	   imageArr.push(data.url);
+	    	        	   //console.log(imageArr); 
+	    	           } else {
+	    	        	   alert("이미지 임시저장에 실패했습니다");
+	    	           }
+	    	       },
+	    	        error(e){
+	    	           console.log("error : "+ e);
+	    	        }
+	    	    });
+	    	}
+			
+			
+	    	// 이미지  temp 삭제
+	    	function deleteFile(fileName) {
+	    	    let formData = new FormData();
+	    	    formData.append("file", fileName);
+
+	    	    $.ajax({
+	    	        type : "POST",
+	    	        url : "/upload/imageDelete",
+	    	        data : formData,
+	    	        contentType: false,
+	    	        processData: false,
+	    	        encType : "multipart/form-data"
+	    	    });
+	    	}
+			
+	    	
+	    	// 전송하기
+	    	$("#createBtn").on("click" , function(e){
+	    		
+	    		e.preventDefault();
+	    		
+	    		let characterClass = $("#characterClass").val();
+	    		if ($("#characterClass").val() == ""){
+	    			alert("직업을 선택해주세요.");
+	    			return;
+	    		}
+	    		
+	    		let subject = $("#subject").val();
+	    		if (subject == ""){
+	    			alert("제목을 입력하세요.");
+	    			return;
+	    		}
+	    		
+	    		let summernoteval = $("#summernote").val();
+	    		if ( summernoteval ==""){
+	    			alert("내용을 입력하세요.");
+	    			return;
+	    		}
+	    		
+	    		//console.log(characterClass);
+	    		//console.log(subject);
+	    		//console.log(summernoteval);
+	    		
+	    		// form 내용 담기
+	    		let formData = new FormData(document.querySelector("#boardForm"));
+	    		
+	    		// 이미지담기
+	    		if (imageArr.length > 0){
+	    			for (let i = 0; i < imageArr.length; i++){
+	    				formData.append("imgArr[]" ,imageArr[i]);
+	    			}
+	    		}
+	    		
+	    		$.ajax({
+	                type: "POST",  
+	                url: "/classboard/create-board", 
+	                data: formData,  // 서버로 보낼 데이터 (이미지 포함)
+	                contentType: false,  // 콘텐츠 타입을 자동으로 설정하지 않도록
+	                processData: false,  // jQuery가 데이터를 처리하지 않도록 설정
+	                enctype: 'multipart/form-data',  // 멀티파트 데이터 전송을 명시
+	                success: function(data) {
+	                   if(data.code == 200){
+	                	   alert(data.result);
+	                	   location.href = "/classboard/board-list-view";
+	                   }
+	                },
+	                error: function(e) {
+	                	alert("2");
+	                }
+	            });
+	    		
+	    		
+	    		
+	    	});
+			
+			
+		});
+	
+	</script>
+
+
+</th:block>

@@ -74,8 +74,7 @@
 				let userId = $(this).data("user-id");
 				let subject = $("#subject").val().trim();
 				let content = $("#content").val();
-				let file = $("#contentImg").val();
-				
+				let files = $("#contentImg")[0].files;
 				
 				if(subject == ""){
 					alert("제목을 입력해주세요.");
@@ -90,8 +89,13 @@
 				formData.append("userId" , userId);
 				formData.append("subject" , subject);
 				formData.append("content" , content);
-				formData.append("file" , $("#contentImg")[0].files[0]);
 				
+				if (files != ""){
+					for(let i = 0; i < files.length; i++){
+						formData.append("files[]" , files[i]);
+						console.log(files[i]);
+					}
+				}
 				
 				$.ajax({
 					type : "POST"

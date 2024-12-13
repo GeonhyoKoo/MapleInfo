@@ -37,7 +37,26 @@ public class ClassBoardController {
 		}
 	
 		
-		// 직업 게시판 글쓰기
+		// 기존 직업 게시판 글쓰기
+//		@GetMapping("/create-view")
+//		public String create(
+//				HttpSession session,
+//				Model model
+//				) {
+//			
+//			Integer userId = (Integer)session.getAttribute("id");
+//			if(userId == null) {
+//				return "user/signIn";
+//			}
+//			
+//			model.addAttribute("userId", userId);
+//			
+//			return "classBoard/createClassBoard";
+//		}
+
+		
+		
+		// summerNote로 글쓰기
 		@GetMapping("/create-view")
 		public String create(
 				HttpSession session,
@@ -51,9 +70,9 @@ public class ClassBoardController {
 			
 			model.addAttribute("userId", userId);
 			
-			return "classBoard/createClassBoard";
+			return "classBoard/createClassBoardBySummernote";
 		}
-
+		
 		
 		
 		// 자유 게시판 상세 내용
@@ -93,6 +112,7 @@ public class ClassBoardController {
 			
 			return "classBoard/updateClassBoard";
 		}
+		
 		
 		
 	

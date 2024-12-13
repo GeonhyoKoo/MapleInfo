@@ -30,9 +30,7 @@ public class FreeBoardController {
 	// 자유 게시판 메인 화면
 	@GetMapping("/board-list-view")
 	public String boardList(
-			Model model,
-			@RequestParam(value = "prevId", required = false) Integer prevId,
-			@RequestParam(value = "nextId", required = false) Integer nextId
+			Model model
 			) {
 		
 //		List<FreeBoard> freeBoardList = freeBoardBO.getFreeBoardList();
@@ -109,11 +107,19 @@ public class FreeBoardController {
 	@GetMapping("/update/{boardId}")
 	public String updateFreeBoard(
 			@PathVariable(name = "boardId") int boardId,
-			Model model
+			Model model,
+			HttpSession session
 			) {
 		
-		FreeBoard freeBoard = freeBoardBO.getFreeBoardByFreeBoardId(boardId);
-		model.addAttribute("freeBoard", freeBoard);
+		Integer userId = (Integer)session.getAttribute("id");
+		if(userId == null) {
+			return "user/signIn";
+		}
+		
+		userId = (int)userId;
+		
+		FreeBoardDTO freeBoardDTO = freeBoardBO.generateFreeBoard(boardId, userId);
+		model.addAttribute("freeBoard", freeBoardDTO);
 		
 		
 		return "freeBoard/updateFreeBoard";

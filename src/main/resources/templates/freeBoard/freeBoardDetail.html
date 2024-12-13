@@ -22,8 +22,10 @@
 		</div>		
 		
 		<!-- 이미지 -->
-		<div class="d-flex align-items-center my-3" th:if="${freeBoard.freeboard.imagePath} != null">
-				<img th:src="${freeBoard.freeboard.imagePath}" alt="freeBoardImage">
+		<div class="d-flex align-items-center my-3" th:if="${freeBoard.boardImg} != null">
+				<div class="d-flex" th:each="boardimg : ${freeBoard.boardImg}">
+					<img th:src="${boardimg.imagePath}" alt="freeBoardImage">
+				</div>
 		</div>	
 		
 		<!-- 수정하기, 삭제하기 버튼 -->

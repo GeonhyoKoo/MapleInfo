@@ -7,29 +7,23 @@
 <section layout:fragment="content" class="contents d-flex justify-content-center">
 	<div class="w-100">
 		<div class="d-flex justify-content-between mt-3">
-				<h3>자유 게시판 수정하기</h3>		
+				<h3>자유 게시판 글쓰기</h3>		
 		</div>
 				
 		<!-- 제목 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3">제목</span>
-			<input th:value="${freeBoard.freeboard.subject}" type ="text" class="form form-control infoBoxUp" id="subject" name="subject">
+			<input type ="text" class="form form-control infoBoxUp" id="subject" name="subject" placeholder="제목을 입력하세요.">
 		</div>
 		<!-- 내용 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3">내용</span>
-			<textarea th:text="${freeBoard.freeboard.content}" id="content" class="contentBox" rows="13"></textarea>
+			<textarea id="content" class="contentBox" rows="13" placeholder="내용을 입력하세요."></textarea>
 		</div>		
 		
-		 <!-- 이미지 -->
+		<!-- 이미지 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3">이미지</span>
-			<div class="d-flex align-items-center my-3" th:if="${freeBoard.boardImg} != null">
-				<div class="d-flex" th:each="boardimg : ${freeBoard.boardImg}">
-					<img th:src="${boardimg.imagePath}" alt="freeBoardImage">
-				</div> 
-			</div>	 
-			
 			<div class="d-flex justify-content-center my-3">
 				<input type ="text" id="imgName" class="form form-control infoBoxUp mx-3">
 				<input type ="file" id="contentImg" name="files[]" multiple accept=".jpg, .png">
@@ -38,7 +32,7 @@
 				
 		<!-- 추가하기 버튼 -->
 		<div class="d-flex justify-content-center my-4">
-			<input type="button" id="updateBtn" class="btn btn-danger" th:data-freeboard-id="${freeBoard.freeboard.id}" value="수정하기">
+			<input type="button" id="createBtn" class="btn btn-danger" th:data-user-id="${userId}" value="추가하기">
 		</div>
 				
 	</div>
@@ -75,12 +69,13 @@
 			
 			
 			// 작성하기
-			$("#updateBtn").on("click" , function(){
+			$("#createBtn").on("click" , function(){
 				
-				let boardId = $(this).data("freeboard-id");
-				let subject = $("#subject").val();
+				let userId = $(this).data("user-id");
+				let subject = $("#subject").val().trim();
 				let content = $("#content").val();
-				let files = $("#contentImg")[0].files;
+				let file = $("#contentImg").val();
+				
 				
 				if(subject == ""){
 					alert("제목을 입력해주세요.");
@@ -92,40 +87,34 @@
 				}
 				
 				let formData = new FormData();
-				formData.append("boardId" , boardId);
+				formData.append("userId" , userId);
 				formData.append("subject" , subject);
 				formData.append("content" , content);
-				
-				if (files != ""){
-					for(let i = 0; i < files.length; i++){
-						formData.append("files[]" , files[i]);
-						console.log(files[i]);
-					}
-				}
+				formData.append("file" , $("#contentImg")[0].files[0]);
 				
 				
 				$.ajax({
-					type : "PUT"
-					, url : "/freeboard/update-board"
+					type : "POST"
+					, url : "/freeboard/create-board"
 					, data : formData
 					, enctype : "multipart/form-data"
 					, processData : false
 					, contentType : false
 					, success : function(data){
 						if (data.code == 201){
-							alert("수정되었습니다.");
-							location.reload(true);
+							alert("작성되었습니다.");
+							location.href = "/freeboard/board-list-view";
 						} else if (data.code == 300){
 							alert(data.error_message);
 							location.href = "/user/sign-in-view";
 						} else if (data.code == 301){
 							alert(data.error_message);
-						} else if(data.code == 306){
+						} else if (data.code == 310){
 							alert(data.error_message);
 						}
 					}
 					, error : function(e){
-						alert("글 수정에 실패했습니다. 관리자에게 문의해주세요.");
+						alert("글 작성에 실패했습니다. 관리자에게 문의해주세요.");
 					}
 					
 				});

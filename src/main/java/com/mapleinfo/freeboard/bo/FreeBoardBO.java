@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mapleinfo.boardImg.bo.BoardImgBO;
+import com.mapleinfo.boardImg.domain.BoardImg;
 import com.mapleinfo.comment.bo.CommentBO;
 import com.mapleinfo.common.FileManagerService;
 import com.mapleinfo.freeboard.domain.FreeBoard;
@@ -29,25 +30,56 @@ public class FreeBoardBO {
 	private final BoardImgBO boardImgBO;
 	
 	// 자유 게시판 글 작성
-	public int addFreeBoard(int userId, String loginId,  String subject , String content, MultipartFile file) {
+//	public int addFreeBoard(int userId, String loginId,  String subject , String content, MultipartFile file) {
+//		
+//		String imagePath = null;
+//		FreeBoard freeboard = new FreeBoard();
+//		freeboard.setUserId(userId);
+//		freeboard.setContent(content);
+//		freeboard.setSubject(subject);;
+//		freeBoardMapper.insertFreeBoard(freeboard);
+//		
+//		if(file != null) {
+//			imagePath = fileManager.uploadFile(loginId, file);
+//			int boardId = freeboard.getId();
+//			boardImgBO.addBoardImg("자유" , boardId , imagePath);
+//			return 1;
+//		} 
+//		
+//		return 1;
+//	}
+	
+	
+	// 자유 게시판 글 작성
+	public int addFreeBoard(int userId, String loginId,  String subject , String content, MultipartFile[] files) {
 		
-		String imagePath = null;
 		FreeBoard freeboard = new FreeBoard();
 		freeboard.setUserId(userId);
 		freeboard.setContent(content);
 		freeboard.setSubject(subject);;
+		freeBoardMapper.insertFreeBoard(freeboard);
+		int boardId = freeboard.getId();
 		
-		if(file != null) {
-			imagePath = fileManager.uploadFile(loginId, file);
-			freeBoardMapper.insertFreeBoard(freeboard);
-			int boardId = freeboard.getId();
-			boardImgBO.addBoardImg("자유" , boardId , imagePath);
+		String originImagePath = null;
+		String imagePath = null;
+		if(files != null) {
+			
+			for (int i = 0; i < files.length; i++) {
+				if(i == 0) {
+					originImagePath = fileManager.uploadFile(loginId , files[i]);
+					boardImgBO.addBoardImg("자유", boardId, originImagePath);
+				} else {
+				imagePath = fileManager.uploadFileDuplicate(originImagePath, files[i]);
+				boardImgBO.addBoardImg("자유" , boardId , imagePath);
+				}
+			}
 			return 1;
-		} else {
-			freeBoardMapper.insertFreeBoard(freeboard);
-			return 1;
-		}
+		} 
+		return 1;
 	}
+
+	
+	
 	
 	
 	
@@ -75,6 +107,8 @@ public class FreeBoardBO {
 		freeBoard.setUser(userBO.getUserEntityById(post.getUserId()));
 		
 		freeBoard.setFreeboard(post);
+		
+		freeBoard.setBoardImg(boardImgBO.getBoardImgByBoardId("자유" , post.getId()));
 		
 		freeBoard.setCommentList(commentBO.generateCommentList("자유", freeBoardId));
 		
@@ -116,6 +150,7 @@ public class FreeBoardBO {
 	public int deleteFreeBoard(int userId , String loginId , int boardId) {
 		
 		FreeBoard post = freeBoardMapper.selectFreeBoardByFreeBoardId(boardId);
+		List<BoardImg> postImg = boardImgBO.getBoardImgByBoardId("자유" , boardId);
 		
 		if(post == null) {
 			return -1;
@@ -127,8 +162,21 @@ public class FreeBoardBO {
 		
 		likeBO.deleteLikeList("자유", boardId);
 		
-		if(post.getImagePath() != null) {
-			fileManager.deleteFile(post.getImagePath());
+		if(postImg.size() > 0) {
+			
+			if (postImg.size() == 1) {
+				fileManager.deleteFile(postImg.get(0).getImagePath());
+			} else {
+				for (int i = postImg.size()-1; i >= 0; i--) {
+					if (i != 0){
+						fileManager.deletePrevFile(postImg.get(i).getImagePath());
+					} else {
+						fileManager.deleteFile(postImg.get(i).getImagePath());
+					}
+				}
+			}
+		
+			boardImgBO.deleteBoardImg("자유", boardId);
 		}
 		return 1;
 	}
@@ -136,7 +184,7 @@ public class FreeBoardBO {
 	
 	
 	// 글 수정
-	public int updateFreeBoard(int boardId, int userId, String loginId, String subject, String content, MultipartFile file) {
+	public int updateFreeBoard(int boardId, int userId, String loginId, String subject, String content, MultipartFile[] files) {
 		
 		// 로그인 정보와 일치 안하면 리턴
 		FreeBoard freeBoard = freeBoardMapper.selectFreeBoardByFreeBoardId(boardId);
@@ -150,17 +198,100 @@ public class FreeBoardBO {
 		}
 		
 		String imagePath = null;
+		String originImagePath = null;
 		
-		if (file != null) {
-			imagePath =fileManager.uploadFile(loginId, file);
+		if (files != null) {
 			
-			if(imagePath != null && freeBoard.getImagePath() != null) {
-				fileManager.deleteFile(freeBoard.getImagePath());
+			List<BoardImg> boardImgList = boardImgBO.getBoardImgByBoardId("자유" ,boardId);
+			
+			if (boardImgList.size() == 0) {
+				for (int i = 0; i < files.length; i++) {
+					if(i == 0) {
+						originImagePath = fileManager.uploadFile(loginId , files[i]);
+						boardImgBO.addBoardImg("자유", boardId, originImagePath);
+					} else {
+						imagePath = fileManager.uploadFileDuplicate(originImagePath, files[i]);
+						boardImgBO.addBoardImg("자유" , boardId , imagePath);
+					}
+				
+				}
+			
+			} else if (boardImgList.size() == 1) {
+				
+				// 삭제 먼저
+				if (boardImgList.get(0).getImagePath() != "") {
+					fileManager.deleteFile(boardImgList.get(0).getImagePath());
+					boardImgBO.deleteBoardImg("자유", boardId);
+				}
+				
+				// 업로드 이후
+				for (int i = 0; i < files.length; i++) {
+					if(i == 0) {
+						originImagePath = fileManager.uploadFile(loginId , files[i]);
+						boardImgBO.addBoardImg("자유", boardId, originImagePath);
+					} else {
+						imagePath = fileManager.uploadFileDuplicate(originImagePath, files[i]);
+						boardImgBO.addBoardImg("자유" , boardId , imagePath);
+					}
+				
+				}
+			} else {
+				// 먼저 삭제
+				for (int i = boardImgList.size()-1; i>=0; i--) {
+					if (i != 0) {
+						fileManager.deletePrevFile(boardImgList.get(i).getImagePath());
+					} else {
+						fileManager.deleteFile(boardImgList.get(i).getImagePath());
+					}
+				}
+				
+				boardImgBO.deleteBoardImg("자유", boardId);
+				
+				// 업로드 이후
+				for (int i = 0; i < files.length; i++) {
+					if(i == 0) {
+						originImagePath = fileManager.uploadFile(loginId , files[i]);
+						boardImgBO.addBoardImg("자유", boardId, originImagePath);
+					} else {
+						imagePath = fileManager.uploadFileDuplicate(originImagePath, files[i]);
+						boardImgBO.addBoardImg("자유" , boardId , imagePath);
+					}
+				
+				}
+				
 			}
-		}
+			freeBoardMapper.updateFreeBoard(boardId, subject, content);
+		} 
 		
-		freeBoardMapper.updateFreeBoard(boardId, subject, content, imagePath);
+		// 파일 수정시 선택을 안하면 삭제할지?
+//		else if(files == null) {
+//			
+//			List<BoardImg> boardImgList = boardImgBO.getBoardImgByBoardId("자유" ,boardId);
+//			
+//			if(boardImgList.size() == 0) {
+//				freeBoardMapper.updateFreeBoard(boardId, subject, content);
+//				return 0;
+//			} else if(boardImgList.size() == 1){
+//				if (boardImgList.get(0).getImagePath() != "") {
+//					fileManager.deleteFile(boardImgList.get(0).getImagePath());
+//					boardImgBO.deleteBoardImg("자유", boardId);
+//				}
+//				freeBoardMapper.updateFreeBoard(boardId, subject, content);
+//				return 0;
+//			} else {
+//				for (int i = boardImgList.size()-1; i>=0; i--) {
+//					if (i != 0) {
+//						fileManager.deletePrevFile(boardImgList.get(i).getImagePath());
+//					} else {
+//						fileManager.deleteFile(boardImgList.get(i).getImagePath());
+//					}
+//				}
+//				freeBoardMapper.updateFreeBoard(boardId, subject, content);
+//				return 0;
+//			}
+//		}
 		
+		freeBoardMapper.updateFreeBoard(boardId, subject, content);
 		return 0;
 	}
 	

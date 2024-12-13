@@ -29,7 +29,6 @@
 			, `userId`
 			, `subject`
 			, `content`
-			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		FROM
@@ -43,7 +42,6 @@
 			, `userId`
 			, `subject`
 			, `content`
-			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		FROM
@@ -68,9 +66,6 @@
 		SET
 			`subject` = #{subject}
 			, `content` = #{content}
-			<if test="imagePath != null">
-			, `imagePath` = #{imagePath}
-			</if>
 			, `updatedAt` = NOW()
 		WHERE
 			`id` = #{boardId}
@@ -85,7 +80,6 @@
 			`userId`,
 			`subject`,
 			`content`,
-			`imagePath`,
 			`createdAt`,
 			`updatedAt`
 		FROM `freeBoard`

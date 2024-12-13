@@ -3,7 +3,7 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapleinfo.classboard.mapper.ClassBoardMapper">
 
-	<insert id="insertClassBoard" parameterType="map">
+	<!-- <insert id="insertClassBoard" parameterType="map">
 		iNSERT INTO `classBoard`
 		(
 			`userId`
@@ -24,6 +24,29 @@
 			, NOW()
 			, NOW()
 		)
+	</insert> -->
+
+
+	<!--  summernote -->
+	<insert id="insertClassBoard" parameterType="com.mapleinfo.classboard.domain.ClassBoard" useGeneratedKeys="true" keyProperty="id">
+		iNSERT INTO `classBoard`
+		(
+			`userId`
+			, `characterClass`
+			, `subject`
+			, `content`
+			, `createdAt`
+			, `updatedAt`
+		)
+		VALUES
+		(
+			#{userId}
+			, #{characterClass}
+			, #{subject}
+			, #{content}
+			, NOW()
+			, NOW()
+		)
 	</insert>
 
 
@@ -35,7 +58,6 @@
 			, `characterClass`
 			, `subject`
 			, `content`
-			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		FROM
@@ -50,7 +72,6 @@
 			, `characterClass`
 			, `subject`
 			, `content`
-			, `imagePath`
 			, `createdAt`
 			, `updatedAt`
 		FROM
@@ -83,5 +104,16 @@
 			`id` = #{boardId}
 	</update>
 
+
+	<!--  summernote 이미지 주소변경을 위해 content 변경 -->
+	<update id="updateClassBoardForChangePath" parameterType="map">
+		UPDATE `classBoard`
+		SET
+			`content` = #{content}
+			, `updatedAt` = NOW()
+		WHERE
+			`id` = #{boardId}
+			AND `characterClass` = #{type}
+	</update>
 	 
 </mapper>

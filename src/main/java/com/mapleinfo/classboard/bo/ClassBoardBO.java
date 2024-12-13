@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mapleinfo.boardImg.bo.BoardImgBO;
 import com.mapleinfo.classboard.domain.ClassBoard;
 import com.mapleinfo.classboard.domain.ClassBoardDTO;
 import com.mapleinfo.classboard.mapper.ClassBoardMapper;
@@ -25,20 +26,90 @@ public class ClassBoardBO {
 	private final UserBO userBO;
 	private final LikeBO likeBO;
 	private final CommentBO commentBO;
+	private final BoardImgBO boardImgBO;
 	
 	
 	
 	
-	// 자유 게시판 글 작성
-	public int addClassBoard(int userId, String characterClass, String loginId,  String subject , String content, MultipartFile file) {
+	// 기존 자유 게시판 글 작성 
+//	public int addClassBoard(int userId, String characterClass, String loginId,  String subject , String content, MultipartFile file) {
+//		
+//		String imagePath = null;
+//		if(file != null) {
+//			imagePath = fileManager.uploadFile(loginId, file);
+//		}
+//		
+//		return classBoardMapper.insertClassBoard(userId, characterClass ,subject, content, imagePath);
+//	}
+	
+	
+	
+	// Summernote 글 작성
+	public int addClassBoard(ClassBoard classBoard , String loginId, String[] imgArr) {
 		
-		String imagePath = null;
-		if(file != null) {
-			imagePath = fileManager.uploadFile(loginId, file);
+		
+		// 이미지가 없으면
+		if (imgArr == null) {
+			return classBoardMapper.insertClassBoard(classBoard);			
+		} else {
+		// 이미지가 있으면
+			
+			// 1. classBoard에 insert
+			classBoardMapper.insertClassBoard(classBoard);
+			int boardId = classBoard.getId();
+			String type = classBoard.getCharacterClass();
+			
+			String originPath = null;
+			String nowPath = null;
+			
+			
+			
+			for (int i = 0; i < imgArr.length; i++) {
+				if (i == 0) {
+					// 파일 저장
+					// /classBoard/abcde_1734008777989/27922e0d-ccee-4b46-9f3a-568161cf3fd6.png
+					originPath = fileManager.uploadSummerNoteFileFirst(imgArr[i], loginId);
+					
+					// BoardImgBO에 insert
+					boardImgBO.addBoardImg(type, boardId, originPath);
+					
+				} else {
+					// 파일 저장
+					///classBoard/abcde_1734008963483/bee02680-44fe-48ad-a0e5-9c625ae4a401.png
+					nowPath = fileManager.uploadSummerNoteFileElse(originPath, imgArr[i]);
+					
+					// BoardImgBO에 insert
+					boardImgBO.addBoardImg(type, boardId, originPath);
+				}
+			}
+			
+			
+			// content를 temp -> classboard로 시작하는 곳으로 위치 바꾸기
+			String content = classBoard.getContent();
+			
+			String path = null;
+			if (originPath != null) {
+				String[] pathPart = originPath.split("/");
+				
+				if(pathPart.length > 2) {
+					path = pathPart[2];
+				}
+			}
+			
+			if (content != null) {
+				content = content.replace("/temp/", "/classBoard/" + path + "/");
+			}
+			
+			// 업데이트
+			classBoardMapper.updateClassBoardForChangePath(type , boardId, content);
+			
 		}
 		
-		return classBoardMapper.insertClassBoard(userId, characterClass ,subject, content, imagePath);
+		return classBoard.getId();
 	}
+	
+	
+	
 	
 	
 	
@@ -108,9 +179,9 @@ public class ClassBoardBO {
 		
 		likeBO.deleteLikeList(characterClass, boardId);
 		
-		if(post.getImagePath() != null) {
-			fileManager.deleteFile(post.getImagePath());
-		}
+//		if(post.getImagePath() != null) {
+//			fileManager.deleteFile(post.getImagePath());
+//		}
 		return 1;
 	}
 	
@@ -141,9 +212,9 @@ public class ClassBoardBO {
 		if (file != null) {
 			imagePath =fileManager.uploadFile(loginId, file);
 			
-			if(imagePath != null && classBoard.getImagePath() != null) {
-				fileManager.deleteFile(classBoard.getImagePath());
-			}
+//			if(imagePath != null && classBoard.getImagePath() != null) {
+//				fileManager.deleteFile(classBoard.getImagePath());
+//			}
 		}
 		
 		classBoardMapper.updateClassBoard(boardId, subject, content, imagePath);

@@ -21,4 +21,33 @@
 		)
 	</insert>
 	
+	
+	<select id="selectBoardImgByBoardId" parameterType="map" resultType="com.mapleinfo.boardImg.domain.BoardImg">
+		SELECT
+			`id`
+			, `type`
+			, `boardId`
+			, `imagePath`
+			, `createdAt`
+			, `updatedAt`
+		FROM
+			`boardImg`
+		WHERE
+			`type` = #{type}
+			AND
+			`boardId` = #{boardId}
+	</select>
+	
+	<delete id="deleteBoardImg" parameterType="map">
+		DELETE
+		FROM `boardImg`
+		WHERE 
+			`type` = #{type}
+			AND
+			`boardId` = #{boardId}
+	
+	</delete>
+	
+	
+	
 </mapper>
