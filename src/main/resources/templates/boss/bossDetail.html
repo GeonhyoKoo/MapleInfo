@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+      
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-100">
+		<div class="d-flex justify-content-between mt-3">
+				<h3>보스 상세</h3>		
+		</div>
+		
+		<!-- 기본 -->
+		<div class="d-flex justify-content-center align-items-center my-5">
+			<span class="mr-3 font-weight-bold">보스명:</span>
+			<span th:text=${board.boss.bossName} id="bossName"></span>
+			<span class="mx-3 font-weight-bold">월드:</span>
+			<span th:text=${board.boss.world} id="world"></span>
+			<span class="mx-3 font-weight-bold">상태:</span>
+			<th:block th:if="${board.boss.state == '모집중'}">
+			<span th:text=${board.boss.state} id="state" class="text-info"></span>
+			</th:block>
+			<th:block th:unless="${board.boss.state == '모집중'}">
+			<span th:text=${board.boss.state} id="state" class="text-danger"></span>
+			</th:block>
+			<span class="mx-3 font-weight-bold">모집 전투력:</span>
+			<span th:text=${board.boss.recommendStat} class="text-danger" id="recommendStat"></span>
+			<span class="mx-3 font-weight-bold">모집 인원:</span>
+			<span th:text="|${board.boss.presentMember} / ${board.boss.memberLimit}|" id="memberLimit"></span>
+		</div>
+		
+		
+		<!-- 제목 -->
+		<div class="ml-5 d-flex align-items-center my-4">
+			<span class="mr-3 font-weight-bold">제목</span>
+			<span th:text=${board.boss.subject}>제목</span>
+		</div>
+		
+		<!-- 내용 -->
+		<div class="ml-5 d-flex align-items-center my-4">
+			<span class="mr-3 font-weight-bold">내용</span>
+			<span th:text=${board.boss.content}></span>
+		</div>		
+		
+				
+		<!-- 수정하기 버튼 (내가 쓴 글) -->
+		<th:block th:if="${userId == board.boss.userId}">
+			<div class="d-flex justify-content-end my-4">
+				<a th:href="|/boss/update-view?bossId=${board.boss.id}|" class="btn btn-warning mx-3">수정하기</a>
+				<input type="button" id="deleteBtn" class="btn btn-danger mx-3" th:data-boss-id="${board.boss.id}" th:data-boss-name="${board.boss.bossName}" value="삭제하기">
+			</div>
+		</th:block>
+		
+		<th:block th:unless="${userId == board.boss.userId}">
+			<th:block th:each="member : ${board.bossMember}">
+				<div th:if="${member.userId != userId}" class="d-flex justify-content-end mx-5">
+					<input type="button" id="applyBtn" class="btn btn-success mx-3" th:data-user-id="${userId}"  th:data-boss-id="${board.boss.id}" value="지원하기">
+				</div>
+				<div th:if="${member.userId == userId}" class="d-flex justify-content-end mx-5">
+					<input type="button" id="cancelBtn" class="btn btn-danger mx-3" th:data-user-id="${userId}"  th:data-boss-id="${board.boss.id}" value="지원 취소하기">
+				</div>
+			</th:block>
+		</th:block>
+		
+				
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	<script>
+		$(document).ready(function(){
+			
+			// 삭제하기
+			$("#deleteBtn").on("click" , function(){
+				
+				let bossId = $(this).data("boss-id");
+				let bossName = $(this).data("boss-name");
+				
+				$.ajax({
+					type : "DELETE"
+					, url : "/boss/delete"
+					, data : {"bossId" : bossId}
+					, success : function(data){
+						if (data.code == 210){
+							alert(data.result);
+							location.href = "/boss/board?bossName=" + bossName;
+						} else if (data.code == 301){
+							alert(data.error_message);
+						} else if (data.code == 320){
+							alert(data.error_message);
+						} else if (data.code == 300){
+							alert(data.error_message);
+						}
+						
+					}
+					, error : function(e){
+						alert(e.error_message);
+					}
+				});
+			});
+			
+			
+			// 지원하기
+			$("#applyBtn").on("click", function(){
+				
+				let userId = $(this).data("user-id");
+				let bossId = $(this).data("boss-id");
+				let state = $("#state").text();
+				
+				if (state == "종료"){
+					alert("이미 종료된 파티입니다.");
+					return;
+				}
+				
+				$.ajax({
+					type : "POST"
+					, url : "/boss/apply"
+					, data : {"userId" : userId , "bossId" : bossId}
+					, success : function(data){
+						if(data.code == 200){
+							alert(data.result);
+							location.reload();
+						} else if (data.code == 300){
+							alert(data.error_message);
+						} else if (data.code == 301){
+							alert(data.error_message);
+						}
+					}
+					, error : function(e){
+						alert(e.error_message);
+					}
+				});
+				
+				
+				
+			});
+			
+			
+			
+			
+		});
+	</script>
+</th:block>

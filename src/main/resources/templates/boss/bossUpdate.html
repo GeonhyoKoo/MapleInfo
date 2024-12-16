@@ -13,30 +13,19 @@
 		<!-- 기본 -->
 		<div class="d-flex justify-content-center align-items-center my-2">
 			<span class="mr-3 font-weight-bold">보스명</span>
-			<span th:text=${bossName} class="bossInfoBox form form-control text-center" id="bossName"></span>
+			<span th:text=${board.boss.bossName} class="bossInfoBox form form-control text-center" id="bossName"></span>
 			<!-- 월드 -->
-			<div class="d-flex ml-5">
-				<span class="font-weight-bold">월드</span>
+			<div class="d-flex justify-content-center align-items-center ml-5">
+				<span class="font-weight-bold mr-3">월드</span>
+				<input th:value="${board.boss.world}" readonly type ="text" class="form form-control bossInfoBox mr-3" id="world" name="world">
 			</div>
-			<div class="d-flex justify-content-center my-3 align-items-center">
-				<select id="world" class="selectBox mx-3">
-					<option value="">------</option>
-					<option value="스카니아">스카니아</option>
-					<option value="루나">루나</option>
-					<option value="엘리시움">엘리시움</option>
-					<option value="크로아">크로아</option>
-					<option value="베라">베라</option>
-					<option value="오로라">오로라</option>
-					<option value="리부트">리부트</option>
-				</select>
-			</div>
+			
 			<!-- 상태명 -->
 			<span class="mr-3 font-weight-bold">상태</span>
 			<div class="d-flex justify-content-center my-3 align-items-center">
 				<select id="state" class="selectBox mx-3">
-					<option value="">------</option>
-					<option value="모집중">모집중</option>
-					<option value="종료">종료</option>
+					<option value="모집중" th:selected="${board.boss.state == '모집중'}">모집중</option>
+					<option value="종료" th:selected="${board.boss.state == '종료'}">종료</option>
 				</select>
 			</div>
 		</div>
@@ -45,28 +34,28 @@
 		<!-- 전투력, 인원 -->
 		<div class="d-flex justify-content-center align-items-center my-1">
 			<span class="mr-3 font-weight-bold">모집 전투력</span>
-			<input type ="text" class="form form-control bossProperBox" id="recommendStat" name="recommendStat" placeholder="ex) 1억 5000만 -> 1억 5천 이상으로 측정">
+			<input th:value="${board.boss.recommendStat}" type ="text" class="form form-control bossProperBox" id="recommendStat" name="recommendStat" placeholder="ex) 1억 5000만 -> 1억 5천 이상으로 측정">
 			<span class="ml-3 font-weight-bold">모집 인원</span>
-			<input type ="text" class="form form-control ml-3" id="memberLimit" name="memberLimit" placeholder="ex) 6">
+			<input th:value="|${board.boss.presentMember} / ${board.boss.memberLimit}|" readonly type ="text" class="form form-control ml-3" id="memberLimit" name="memberLimit" placeholder="ex) 6">
 		</div>
 		
 				
 		<!-- 제목 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3 font-weight-bold">제목</span>
-			<input type ="text" class="form form-control infoBoxUp" id="subject" name="subject" placeholder="제목을 입력하세요.">
+			<input th:value="${board.boss.subject}" type ="text" class="form form-control infoBoxUp" id="subject" name="subject" placeholder="제목을 입력하세요.">
 		</div>
 		
 		<!-- 내용 -->
 		<div class="d-flex justify-content-center align-items-center my-3">
 			<span class="mr-3 font-weight-bold">내용</span>
-			<textarea id="content" class="contentBox" rows="13" placeholder="내용을 입력하세요."></textarea>
+			<textarea th:text="${board.boss.content}" id="content" class="contentBox" rows="13" placeholder="내용을 입력하세요."></textarea>
 		</div>		
 		
 				
-		<!-- 추가하기 버튼 -->
+		<!-- 수정하기 버튼 -->
 		<div class="d-flex justify-content-center my-4">
-			<input type="button" id="createBtn" class="btn btn-danger" th:data-user-id="${userId}" value="모집하기">
+			<input type="button" id="updateBtn" class="btn btn-danger" th:data-boss-id="${board.boss.id}" value="수정하기">
 		</div>
 				
 	</div>
@@ -76,26 +65,13 @@
 	<script>
 		$(document).ready(function(){
 			
-			$("#createBtn").on("click" , function(){
+			$("#updateBtn").on("click" , function(){
 				
-				let bossName = $("#bossName").text();
-				let world = $("#world").val();
 				let state = $("#state").val();
 				let recommendStat = $("#recommendStat").val().trim();
-				let memberLimit = $("#memberLimit").val().trim();
 				let subject = $("#subject").val().trim();
 				let content = $("#content").val().trim();
-				let id = $(this).data("user-id");
-				
-				if (bossName == ""){
-					alert("보스명이 설정되지 않았습니다. 다시 선택 부탁드립니다.");
-					location.href = "/boss/main";
-				}
-				
-				if (world == ""){
-					alert("월드를 선택해주세요.");
-					return;
-				}
+				let bossId = $(this).data("boss-id");
 				
 				if (state == ""){
 					alert("모집 상태를 선택해주세요.");
@@ -104,11 +80,6 @@
 				
 				if (recommendStat == ""){
 					alert("모집하려는 전투력을 입력하세요.");
-					return;
-				}
-				
-				if (memberLimit == ""){
-					alert("인원을 입력해주세요.");
 					return;
 				}
 				
@@ -123,33 +94,30 @@
 				}
 				
 				let formData = new FormData();
-				formData.append("bossName" , bossName);
-				formData.append("world" , world);
 				formData.append("state" , state);
 				formData.append("recommendStat" , recommendStat);
-				formData.append("memberLimit" , memberLimit);
 				formData.append("subject" , subject);
 				formData.append("content" , content);
-				formData.append("id" , id);
+				formData.append("bossId" , bossId);
 				
 				
 				$.ajax({
-					type : "POST",
-					url : "/boss/create",
+					type : "PUT",
+					url : "/boss/update",
 					data : formData,
 					processData: false,  
 		            contentType: false,
 					success : function(data){
-						if (data.code == 201){
+						if (data.code == 206){
 							alert(data.result);
-							location.href = "/boss/board?bossName=" + bossName;
+							location.href = "/boss/detail-view?boardId=" + bossId;
 						} else if (data.code == 300){
 							alert(data.error_message);
 							location.href="/user/signIn";
 						} else if (data.code == 301){
 							alert(data.error_message);
 							location.href="/user/signIn";
-						} else if (data.code == 310){
+						} else if (data.code == 315){
 							alert(data.error_message);
 						}
 					}

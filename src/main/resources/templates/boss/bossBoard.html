@@ -37,7 +37,7 @@
 							<tbody>
 								<tr th:if="${bossBoard != null}" th:each="board : ${bossBoard}">
 									<td th:text="${board.id}">No</td>
-									<td th:text="${board.subject}">제목</td>
+									<td><a th:href="|/boss/detail-view?boardId=${board.id}|" th:text="${board.subject}"></a></td>
 									<td th:text="${board.world}">모집 월드</td>
 									<td th:text="${board.recommendStat}">모집 전투력</td>
 									<td th:text="${board.state}">상태</td>

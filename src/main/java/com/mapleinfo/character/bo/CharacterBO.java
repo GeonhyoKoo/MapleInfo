@@ -123,6 +123,10 @@ public class CharacterBO {
 		
 		CharacterEntity result = characterRepository.findByUserIdAndRepresentCharacter(userId , true);
 		
+		if (result == null) {
+			return null;
+		}
+		
 		CharacterDTO characterDTO = new CharacterDTO();
 		characterDTO.setUser(userBO.getUserEntityById(userId));
 		characterDTO.setCharacter(result);

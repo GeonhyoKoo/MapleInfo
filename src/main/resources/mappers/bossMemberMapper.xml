@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapleinfo.bossMember.mapper.BossMemberMapper">
+	
+	<insert id="insertBossMember" parameterType="map">
+		INSERT INTO `bossMember`
+		(
+			`bossId`
+			, `userId`
+			, `createdAt`
+			, `updatedAt`
+		)
+		VALUES
+		(
+			 #{bossId}
+			,#{userId}
+			, NOW()
+			, NOW()
+		)
+	</insert>
+
+
+
+	<select id="selectBossMemberListByBoardId" parameterType="int" resultType="com.mapleinfo.bossMember.domain.BossMember">
+		SELECT
+			`id`
+			, `bossId`
+			, `userId`
+			, `createdAt`
+			, `updatedAt`
+		FROM
+			`bossMember`
+		WHERE
+			`bossId` = #{boardId}
+	</select>
+
+
+	<!--  보스 게시물 삭제로 인한 멤버 삭제 -->
+	<delete id="deleteBossMemberByBossId" parameterType="int">
+		DELETE
+		FROM
+			`bossMember`
+		WHERE
+			`bossId` = #{bossId}
+	</delete>
+	
+</mapper>

@@ -11,6 +11,7 @@
 			 ,`world`
 			 ,`state`
 			 ,`recommendStat`
+			 , `presentMember`
 			 ,`memberLimit`
 			 ,`subject`
 			 ,`content`
@@ -24,7 +25,7 @@
 
 
 	<!-- insert -->
-	<insert id="insertBossBoard" parameterType="map">
+	<insert id="insertBossBoard" parameterType="com.mapleinfo.boss.domain.Boss" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO `boss`
 		(
 			`bossName`
@@ -41,18 +42,82 @@
 		)
 		VALUES
 		(
-			`bossName` = #{bossName}
-			, `userId` = #{userId}
-			, `world` = #{world}
-			, `state` = #{state}
-			, `recommendStat` = #{recommendStat}
-			, `presentMember` = #{presentMember}
-			, `memberLimit` = #{memberLimit}
-			, `subject` = #{subject}
-			, `content` = #{content}
+			#{bossName}
+			, #{userId}
+			, #{world}
+			, #{state}
+			, #{recommendStat}
+			, #{presentMember}
+			, #{memberLimit}
+			, #{subject}
+			, #{content}
 			, NOW()
 			, NOW()
 		)
 	</insert>
+	
+	
+	<!--  한개 가져오기 -->
+	<select id="selectBossBoardByBossId" parameterType="int" resultType="com.mapleinfo.boss.domain.Boss">
+		SELECT
+			`id`
+			 ,`bossName`
+			 ,`userId`
+			 ,`world`
+			 ,`state`
+			 ,`recommendStat`
+			 , `presentMember`
+			 ,`memberLimit`
+			 ,`subject`
+			 ,`content`
+			 ,`createdAt`
+			 ,`updatedAt`
+		FROM
+			`boss`
+		WHERE
+			`id` = #{boardId};
+	</select>
+	
+	<!--  게시물 수정하기 -->
+	<update id="updateBossBoard" parameterType="map">
+		UPDATE `boss`
+		SET
+			`state` = #{state}
+			, `subject` = #{subject}
+			, `recommendStat` = #{recommendStat}
+			, `content` = #{content}
+			, `updatedAt` = NOW()
+		WHERE
+			`id` = #{bossId}
+	</update>
+	
+	
+	<!--  게시물 삭제 -->
+	<delete id="deleteBossBoardByBossId" parameterType="int">
+		DELETE
+		FROM
+			`boss`
+		WHERE
+			`id` = #{bossId}
+	</delete>
+	
+	<!--  게시물 수정 인원수 변경으로 인한 -->
+	<update id="updateBossBoardByMember" parameterType="map">
+		UPDATE `boss`
+		SET
+			`presentMember` = #{presentMember}
+		WHERE
+			`id` = #{bossId}
+	</update>
+	
+	<!--  인원이 꽉 찼을 때 종료로 변경 -->
+	<update id="updateBossBoardByState" parameterType="String">
+		UPDATE `boss`
+		SET
+			`state` = #{state}
+		WHERE
+			`id` = #{bossId}
+	</update>
+	
 	
 </mapper>
