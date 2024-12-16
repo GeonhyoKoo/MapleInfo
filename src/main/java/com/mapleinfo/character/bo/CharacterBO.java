@@ -1,14 +1,19 @@
 package com.mapleinfo.character.bo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mapleinfo.character.config.ConvertToInt;
+import com.mapleinfo.character.domain.CharacterDTO;
 import com.mapleinfo.character.entity.CharacterEntity;
 import com.mapleinfo.character.repository.CharacterRepository;
 import com.mapleinfo.common.FileManagerService;
+import com.mapleinfo.ranking.bo.RankingBO;
+import com.mapleinfo.user.bo.UserBO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CharacterBO {
 
 	private final CharacterRepository characterRepository;
+	private final UserBO userBO;
 	private final FileManagerService fileManeger;
+	private final RankingBO rankingBO;
 	
 	/**
 	 * 캐릭터 닉네임 중복확인
@@ -79,18 +86,24 @@ public class CharacterBO {
 		// 조회먼저 ( 대표캐릭터를 등록할지를 위해)
 		List<CharacterEntity> characterList = characterRepository.findByUserId(userId);
 		
+		// 이미지 저장
 		String imagePath = fileManeger.uploadFile(loginId, file);
+		
+		// 스탯 숫자로 변환 후 추가로 넣기
+		ConvertToInt cti = new ConvertToInt();
+		int originStat = cti.convertStatToInt(stat);
+		
 		
 		if (characterList.size() == 0) {
 			CharacterEntity character = characterRepository.save(CharacterEntity.builder()
 					.userId(userId).name(name).characterClass(characterClass)
-					.world(world).level(level).stat(stat).characterImg(imagePath)
+					.world(world).level(level).stat(stat).originStat(originStat).characterImg(imagePath)
 					.representCharacter(true).build());
 			return character;
 		} else {
 			CharacterEntity character = characterRepository.save(CharacterEntity.builder()
 					.userId(userId).name(name).characterClass(characterClass)
-					.world(world).level(level).stat(stat).characterImg(imagePath)
+					.world(world).level(level).stat(stat).originStat(originStat).characterImg(imagePath)
 					.representCharacter(false).build());
 				return character;
 		}
@@ -104,11 +117,22 @@ public class CharacterBO {
 	 * @param userId
 	 * @return
 	 */
-	public CharacterEntity getRepresentCharacter(int userId) {
+	
+	// 추가 캐릭터 랭크 넣기
+	public CharacterDTO getRepresentCharacter(int userId) {
 		
 		CharacterEntity result = characterRepository.findByUserIdAndRepresentCharacter(userId , true);
 		
-		return result;
+		CharacterDTO characterDTO = new CharacterDTO();
+		characterDTO.setUser(userBO.getUserEntityById(userId));
+		characterDTO.setCharacter(result);
+		
+		int characterId = result.getId();
+		LocalDate today = LocalDate.now();
+		characterDTO.setRanking(rankingBO.getRanking(characterId , today));
+		
+		
+		return characterDTO;
 	}
 	
 	

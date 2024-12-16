@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapleinfo.ranking.mapper.RankingMapper">
+
+	<insert id="insertRanking">
+		INSERT INTO `ranking`
+		(
+			`characterId`
+			, `rank`
+			, `startStandard`
+			, `endStandard`
+			, `createdAt`
+			, `updatedAt`
+		)
+		SELECT
+			`id`
+			, ROW_NUMBER() OVER (ORDER BY `originStat` DESC , `level` DESC) AS `rank`
+			, CURDATE() AS  `startStandard`
+			, DATE_ADD(CURDATE() , INTERVAL 6 DAY) AS `endStandard`
+			, NOW()
+			, NOW()
+		FROM `myCharacter`
+		ORDER BY `originStat` DESC, `level` DESC
+		LIMIT 100;
+	</insert>
+
+
+
+	<select id="selectRankingByCharacterIdAndDate" parameterType="map" resultType="com.mapleinfo.ranking.domain.Ranking">
+		SELECT 
+			`id`
+			, `characterId`
+			, `rank`
+			, `startStandard`
+			, `endStandard`
+			, `createdAt`
+			, `updatedAt`
+		FROM `ranking`
+		WHERE
+			`characterId` = #{characterId}
+			AND
+			<![CDATA[
+			`endStandard` >= #{today}
+			]]>
+	</select>
+
+
+</mapper>

@@ -136,7 +136,17 @@
 	    	        data : formData,
 	    	        contentType: false,
 	    	        processData: false,
-	    	        encType : "multipart/form-data"
+	    	        encType : "multipart/form-data",
+	    	        success : function(data){
+	    	        	if(data.code == 200){
+	    	        		alert(data.result);
+	    	        	} else {
+	    	        		alert(data.error_message);
+	    	        	}
+	    	        },
+	    	        error : function(e){
+	    	        	console.log("error : " + e);
+	    	        }
 	    	    });
 	    	}
 			
@@ -200,7 +210,28 @@
 	    		
 	    	});
 			
+			// 페이지를 닫거나 나갈 때 temp 비우기
+			$(window).on("beforeunload" , function(){
+				
+				// 이미지 파일이 있을 경우만 
+				if (imageArr.length > 0){
+					//alert("파일");
+					let imagePath = null;					
+					for (let i = 0; i < imageArr.length; i++){
+						imagePath = imageArr[i].replace("/temp" , "");
+						deleteFile(imagePath);
+					}
+					
+					imageArr = [];
+				}
+				
+				
+			});
 			
+			
+	    	
+	    	
+	    	
 		});
 	
 	</script>

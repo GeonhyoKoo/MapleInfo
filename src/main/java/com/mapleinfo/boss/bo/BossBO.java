@@ -25,7 +25,19 @@ public class BossBO {
 	}
 	
 	
-	
+	// bossBoard insert
+	public int addBossBoard(String bossName, int userId, String world, String state, 
+			String recommendStat, int memberLimit, String subject, String content) {
+		
+		int presentMember = 1;
+		// boss 게시판에 쌓기
+		int resultCount = bossMapper.insertBossBoard(bossName, userId, world, state,
+				recommendStat, presentMember, memberLimit, subject, content);
+		
+		// boss 멤버에 쌓
+		
+		return resultCount;
+	}
 	
 	
 }

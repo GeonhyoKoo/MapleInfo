@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mapleinfo.character.bo.CharacterBO;
+import com.mapleinfo.character.domain.CharacterDTO;
 import com.mapleinfo.character.entity.CharacterEntity;
 
 import jakarta.servlet.http.HttpSession;
@@ -112,7 +112,7 @@ public class CharacterController {
 			return "character/myCharacterList";
 		}
 		
-		CharacterEntity representCharacter = characterBO.getRepresentCharacter(userId);
+		CharacterDTO representCharacter = characterBO.getRepresentCharacter(userId);
 		if (representCharacter == null) {
 			model.addAttribute("exist", -1);
 			model.addAttribute("characterList" , characterList);

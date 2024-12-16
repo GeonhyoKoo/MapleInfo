@@ -15,6 +15,7 @@ public class Boss {
 	private String world;
 	private String state;
 	private String recommendStat;
+	private int presentMember;
 	private int memberLimit;
 	private String subject;
 	private String content;

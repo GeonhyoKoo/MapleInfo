@@ -1,7 +1,5 @@
 package com.mapleinfo.user.bo;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.mapleinfo.user.common.IdValidation;

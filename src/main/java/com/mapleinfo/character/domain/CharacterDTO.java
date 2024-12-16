@@ -1,6 +1,7 @@
 package com.mapleinfo.character.domain;
 
 import com.mapleinfo.character.entity.CharacterEntity;
+import com.mapleinfo.ranking.domain.Ranking;
 import com.mapleinfo.user.entity.UserEntity;
 
 import lombok.Getter;
@@ -12,6 +13,7 @@ public class CharacterDTO {
 
 	private UserEntity user;
 	private CharacterEntity character;
+	private Ranking ranking;
 	
 	
 	

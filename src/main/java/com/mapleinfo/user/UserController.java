@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mapleinfo.character.bo.CharacterBO;
-import com.mapleinfo.character.entity.CharacterEntity;
+import com.mapleinfo.character.domain.CharacterDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public class UserController {
 			return "redirect:/user/sign-in-view";
 		}
 		
-		CharacterEntity character = characterBO.getRepresentCharacter(userId);
+		CharacterDTO character = characterBO.getRepresentCharacter(userId);
 		if(character != null) {
 			model.addAttribute("character" , character);
 			model.addAttribute("exist", 1);

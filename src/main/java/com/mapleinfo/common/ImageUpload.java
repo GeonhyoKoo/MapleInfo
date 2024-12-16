@@ -89,17 +89,34 @@ public class ImageUpload {
 	
 	
 	// 임시파일 삭제
-//	@PostMapping("/imageDelete")
-//	public Map<String, Object> imageDelete(
-//			HttpSession session,
-//			@RequestParam("file")
-//			){
-//		
-//		
-//		
-//		Map<String , Object> result = new HashMap<>();
-//		
-//		return result;
-//	}
+	@PostMapping("/imageDelete")
+	public Map<String, Object> imageDelete(
+			HttpSession session,
+			@RequestParam("file") String fileName
+			){
+		
+		Map<String , Object> result = new HashMap<>();
+		
+		// fileName = 343492jr-3rr.png
+		// /Users/geonhyo/koo/6_maple_project/workspace/temp/d3812fc1-6d64-4fa7-9da1-a059d4509c9c.png
+		String tempPath = FILE_TEMP_UPLOAD_PATH + fileName;
+		
+		Path path = Paths.get(tempPath);
+	
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.put("code", 600);
+			result.put("error_message", "임시 파일 삭제 실패");
+			return result;
+		}
+		
+		result.put("code", 200);
+		result.put("result", "임시 파일 삭제 완료");
+		
+		return result;
+	}
 	
 }

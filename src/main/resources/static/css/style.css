@@ -31,6 +31,7 @@ footer {
 }
 
 .sectionBox {
+	min-height : 600px;
 	width:800px;
 	margin-top:15px; 
 	margin-bottom : 15px;
@@ -44,6 +45,21 @@ footer {
 .infoBoxUp {
 	width: 75%;
 	border-color: #F8E7E7;
+}
+
+.bossInfoBox {
+	width: 100px;
+	border-color: #F8E7E7;
+}
+
+.bossProperBox {
+	border-color: #F8E7E7;
+	width : 300px;
+}
+
+#memberLimit {
+	border-color: #F8E7E7;
+	width : 100px;
 }
 
 .contentBox {
@@ -113,7 +129,7 @@ footer {
 
 
 .blankBox {
-	height: 50px;
+	height: 100px;
 }
 
 .bossImg {
@@ -123,7 +139,7 @@ footer {
 }
 
 .bossImgBox {
-	height : 400px;
+	height : 250px;
 	width : 200px;
 }
 
@@ -147,4 +163,13 @@ footer {
   border-bottom: 4px solid rgba(0,0,0,0.21);
   border-radius: 4px;
   text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.borderBox {
+    border: 1px solid #F8E7E7;  
+    border-radius: 8px;          
+    margin-bottom: 20px;         
+    background-color: #f8f9fa;   
+    min-height: 50px; 
+    line-height: 40px; 
 }

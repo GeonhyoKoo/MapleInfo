@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mapleinfo.boss.bo.BossBO;
 import com.mapleinfo.boss.domain.Boss;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -47,6 +48,23 @@ public class BossController {
 	
 	
 	
+	@GetMapping("/create-view")
+	public String bossCreateView(
+			Model model,
+			@RequestParam(value="bossName" , required = false) String bossName,
+			HttpSession session
+			) {
+		
+		Integer userId = (Integer)session.getAttribute("id");
+		if (userId == null) {
+			return "user/signIn";
+		}
+		
+		model.addAttribute("userId" , userId);
+		model.addAttribute("bossName", bossName);
+		
+		return "boss/createBoss";
+	}
 	
 	
 	

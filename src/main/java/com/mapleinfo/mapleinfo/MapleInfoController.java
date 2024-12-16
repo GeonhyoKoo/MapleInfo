@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.mapleinfo.character.bo.CharacterBO;
-import com.mapleinfo.character.entity.CharacterEntity;
+import com.mapleinfo.character.domain.CharacterDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class MapleInfoController {
 			return "mapleinfo/mapleinfo";
 		}
 		
-		CharacterEntity representCharacter = characterBO.getRepresentCharacter(userId);
+		CharacterDTO representCharacter = characterBO.getRepresentCharacter(userId);
 		if(representCharacter != null) {
 			model.addAttribute("character" , representCharacter);
 			model.addAttribute("exist", 1);

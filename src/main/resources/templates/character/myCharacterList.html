@@ -10,33 +10,33 @@
 		<div th:if="${exist == 1}" class="infoSection d-flex">
 			<!--  캐릭터 부분 -->
 			<div class="col-3">
-				<img th:src="${representCharacter.characterImg}" class="w-100 h-100">
+				<img th:src="${representCharacter.character.characterImg}" class="w-100 h-100">
 			</div>
 			<!--  캐릭터 설명 부분 -->
 			<div class="col-9 py-3">
 				<div class="mb-1">
 					<span class="font-weight-bold">닉네임 : </span>
-					<span th:text="${representCharacter.name}">닉네임</span>
+					<span th:text="${representCharacter.character.name}">닉네임</span>
 				</div>
 				<div class="mb-1">
 					<span class="font-weight-bold">레벨 : </span>
-					<span th:text="${representCharacter.level}">레벨</span>
+					<span th:text="${representCharacter.character.level}">레벨</span>
 				</div>
 				<div class="mb-1">
 					<span class="font-weight-bold">직업 : </span>
-					<span th:text="${representCharacter.characterClass}">직업</span>
+					<span th:text="${representCharacter.character.characterClass}">직업</span>
 				</div>
 				<div class="mb-1">
 					<span class="font-weight-bold">월드명 : </span>
-					<span th:text="${representCharacter.world}">월드명</span>
+					<span th:text="${representCharacter.character.world}">월드명</span>
 				</div>
 				<div class="mb-1">
 					<span class="font-weight-bold">전투력 : </span>
-					<span th:text="${representCharacter.stat}">전투력</span>
+					<span th:text="${representCharacter.character.stat}">전투력</span>
 				</div>
 				<div class="mb-1">
 					<span class="font-weight-bold">랭킹 : </span>
-					<span th:text="${representCharacter.level}">랭킹</span>
+					<span th:text="|${representCharacter.ranking.rank} 위|">랭킹</span>
 				</div>
 			</div>
 		</div>

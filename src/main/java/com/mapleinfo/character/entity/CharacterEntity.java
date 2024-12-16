@@ -37,6 +37,8 @@ public class CharacterEntity {
 	private String world;
 	private int level;
 	private String stat;
+	@Column(name = "originStat")
+	private int originStat;
 	@Column(name = "characterImg")
 	private String characterImg;
 	@Column(name = "representCharacter")
