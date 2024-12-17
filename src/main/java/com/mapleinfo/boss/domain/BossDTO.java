@@ -16,4 +16,6 @@ public class BossDTO {
 	
 	private List<BossMember> bossMember;
 	
+	private boolean isApply;
+	
 }

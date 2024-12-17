@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mapleinfo.boss.bo.BossBO;
+import com.mapleinfo.boss.common.ConverterBossNameToImg;
 import com.mapleinfo.boss.domain.Boss;
 import com.mapleinfo.boss.domain.BossDTO;
 
@@ -40,8 +41,12 @@ public class BossController {
 			bossBoard = null;
 		}
 		
+		ConverterBossNameToImg cbi = new ConverterBossNameToImg();
+		String bossImg = cbi.CovertBossName(bossName);
+		
 		model.addAttribute("bossBoard", bossBoard);
 		model.addAttribute("bossName", bossName);
+		model.addAttribute("bossImg", bossImg);
 		
 		return "boss/bossBoard";
 	}

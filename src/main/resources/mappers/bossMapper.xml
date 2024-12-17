@@ -111,7 +111,7 @@
 	</update>
 	
 	<!--  인원이 꽉 찼을 때 종료로 변경 -->
-	<update id="updateBossBoardByState" parameterType="String">
+	<update id="updateBossBoardByState" parameterType="map">
 		UPDATE `boss`
 		SET
 			`state` = #{state}

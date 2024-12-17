@@ -38,4 +38,15 @@ public class BossMemberBO {
 	}
 	
 	
+	// 보스 게시물 아이디와 유저 아이디로 일치하는 데이터 가져오기
+	public BossMember getBossMemberByBossIdAndUserId(int bossId, int userId) {
+		return bossMemberMapper.selectBossMemberByBossIdAndUserId(bossId, userId);
+	}
+	
+	// 보스 지원 취소로 인한 멤버 삭제
+	public void deleteBossMemberByBossIdAndUserId(int bossId, int userId) {
+		bossMemberMapper.deleteBossMemberByBossIdAndUserId(bossId , userId);
+	}
+	
+	
 }

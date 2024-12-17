@@ -45,4 +45,33 @@
 			`bossId` = #{bossId}
 	</delete>
 	
+	
+	<!--  일치하는 데이터조회 -->
+	<select id="selectBossMemberByBossIdAndUserId" parameterType="map" resultType="com.mapleinfo.bossMember.domain.BossMember">
+		SELECT
+			`id`
+			, `bossId`
+			, `userId`
+			, `createdAt`
+			, `updatedAt`
+		FROM
+			`bossMember`
+		WHERE
+			`bossId` = #{bossId} 
+			AND
+			`userId` = #{userId}
+	</select>
+	
+	
+	<!--  지원 취소로 인한 멤버 삭제 -->
+	<delete id="deleteBossMemberByBossIdAndUserId" parameterType="map">
+		DELETE
+		FROM
+			`bossMember`
+		WHERE
+			`bossId` = #{bossId}
+			AND
+			`userId` = #{userId}
+	</delete>
+	
 </mapper>

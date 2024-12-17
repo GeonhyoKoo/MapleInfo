@@ -52,13 +52,17 @@
 		</th:block>
 		
 		<th:block th:unless="${userId == board.boss.userId}">
+			
+			<div class="d-flex justify-content-end mx-5" th:if=${board.isApply}>
+				<input type="button" id="applyBtn" class="btn btn-success mx-3" th:data-user-id="${userId}"  th:data-boss-id="${board.boss.id}" value="지원하기">
+			</div>
+		
 			<th:block th:each="member : ${board.bossMember}">
-				<div th:if="${member.userId != userId}" class="d-flex justify-content-end mx-5">
-					<input type="button" id="applyBtn" class="btn btn-success mx-3" th:data-user-id="${userId}"  th:data-boss-id="${board.boss.id}" value="지원하기">
-				</div>
-				<div th:if="${member.userId == userId}" class="d-flex justify-content-end mx-5">
-					<input type="button" id="cancelBtn" class="btn btn-danger mx-3" th:data-user-id="${userId}"  th:data-boss-id="${board.boss.id}" value="지원 취소하기">
-				</div>
+				<th:block th:if="${member.userId} != ${board.boss.userId}">
+					<div th:if="${member.userId == userId}" class="d-flex justify-content-end mx-5">
+						<input type="button" id="cancelBtn" class="btn btn-danger mx-3" th:data-user-id="${userId}"  th:data-boss-id="${board.boss.id}" value="지원 취소하기">
+					</div>
+				</th:block>
 			</th:block>
 		</th:block>
 		
@@ -130,12 +134,41 @@
 						alert(e.error_message);
 					}
 				});
-				
-				
-				
 			});
 			
 			
+			// 지원취소하기
+			$("#cancelBtn").on("click" , function(){
+				
+				let userId = $(this).data("user-id");
+				let bossId = $(this).data("boss-id");
+				let state = $("#state").text();
+				
+				if (state == "종료"){
+					alert("이미 종료된 파티입니다.");
+					return;
+				}
+				
+				$.ajax({
+					type : "POST"
+					, url : "/boss/cancel"
+					, data : {"userId" : userId , "bossId" : bossId}
+					, success : function(data){
+						if(data.code == 200){
+							alert(data.result);
+							location.reload();
+						} else if (data.code == 300){
+							alert(data.error_message);
+						} else if (data.code == 301){
+							alert(data.error_message);
+						}
+					}
+					, error : function(e){
+						alert(e.error_message);
+					}
+				});
+				
+			});
 			
 			
 		});

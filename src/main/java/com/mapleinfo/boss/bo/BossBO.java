@@ -73,6 +73,13 @@ public class BossBO {
 		List<BossMember> bossMember = bossMemberBO.getBossMember(boardId);
 		bossDTO.setBossMember(bossMember);
 		
+		bossDTO.setApply(true);
+		
+		for (int i = 0; i < bossMember.size(); i++) {
+			if(bossMember.get(i).getUserId() == userId) {
+				bossDTO.setApply(false);
+			}
+		}
 		
 		return bossDTO;
 	}
@@ -143,8 +150,35 @@ public class BossBO {
 		// 지원인원이 추가되어 최대 인원과 같아지면 state - 종료로 변경
 		if(presentMember == limitCount) {
 			String state = "종료";
-			bossMapper.updateBossBoardByState("state");
+			bossMapper.updateBossBoardByState(bossId, state);
 		}
+		
+		return 1;
+	}
+	
+	
+	// 지원 취소하기
+	public int cancelBossBoard(int bossId, int userId) {
+		
+		// 게시물 조회먼저
+		Boss boss = bossMapper.selectBossBoardByBossId(bossId);
+		
+		// 멤버 조회
+		BossMember bossMember = bossMemberBO.getBossMemberByBossIdAndUserId(bossId , userId);
+		if (bossMember == null) {
+			return -1;
+		}
+		
+		int presentMember = boss.getPresentMember();
+		
+		presentMember -= 1;
+		
+		// boss 현재원 수정하기
+		bossMapper.updateBossBoardByMember(bossId, presentMember);
+		
+		// bossmember 제외하기
+		bossMemberBO.deleteBossMemberByBossIdAndUserId(bossId , userId);
+		
 		
 		return 1;
 	}

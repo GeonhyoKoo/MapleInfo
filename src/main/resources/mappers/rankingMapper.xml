@@ -46,4 +46,17 @@
 	</select>
 
 
+	<select id="selectRankingList" resultType="com.mapleinfo.ranking.domain.Ranking">
+		SELECT 
+			`id`
+			, `characterId`
+			, `rank`
+			, `startStandard`
+			, `endStandard`
+			, `createdAt`
+			, `updatedAt`
+		FROM `ranking`
+	</select>
+	
+
 </mapper>

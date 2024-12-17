@@ -40,7 +40,10 @@ public interface BossMapper {
 			);	
 	
 	// 인원 수가 차면 종료로 변경되는 업데이트
-	public void updateBossBoardByState(String state);
+	public void updateBossBoardByState(
+			@Param("bossId")int bossId, 
+			@Param("state") String state
+			);
 	
 	
 }

@@ -187,4 +187,42 @@ public class BossRestController {
 		return result;
 	}
 	
+	
+	// 게시물 지원 취소하기
+	@PostMapping("/cancel")
+	public Map<String , Object> cancelBossBoard(
+			HttpSession session,
+			@RequestParam("userId") int userId,
+			@RequestParam("bossId") int bossId
+			){
+		
+		Map<String , Object> result = new HashMap<>();
+		
+		Integer id = (Integer)session.getAttribute("id");
+		
+		if(id == null) {
+			result.put("code", 300);
+			result.put("error_message", "로그인 후 이용 가능한 서비스입니다. 로그인 해주세요.");
+			return result;
+		} if (id != userId) {
+			result.put("code", 301);
+			result.put("error_message", "계정 정보가 일치하지 않습니다. 다시 로그인 해주세요.");
+		}
+	
+		int resultCount = bossBO.cancelBossBoard(bossId, userId);
+		
+		if(resultCount == -1) {
+			result.put("code", 310);
+			result.put("error_message", "파티에 조회된 데이터에 사용자가 존재하지 않습니다.");
+			return result;
+		}
+		
+		
+		
+		result.put("code", 200);
+		result.put("result", "지원 취소하였습니다.");
+		return result;
+	}
+
+	
 }

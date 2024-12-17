@@ -1,6 +1,7 @@
 package com.mapleinfo.ranking.bo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,6 @@ public class RankingBO {
 
 	private final RankingMapper rankingMapper;
 	
-	
 	// 일주일 마다 랭킹을 등록
 	public void addRanking() {
 		rankingMapper.insertRanking();
@@ -27,6 +27,11 @@ public class RankingBO {
 		return rankingMapper.selectRankingByCharacterIdAndDate(characterId, today);
 	}
 	
+	
+	// 랭킹 리스트 가져오기
+	public List<Ranking> getRankingList(){
+		return rankingMapper.selectRankingList();
+	}
 	
 	
 }

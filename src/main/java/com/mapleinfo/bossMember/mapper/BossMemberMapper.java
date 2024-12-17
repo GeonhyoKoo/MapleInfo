@@ -21,4 +21,11 @@ public interface BossMemberMapper {
 	// 보스 게시물 삭제로 인한 멤버삭제
 	public void deleteBossMemberByBossId(int bossId);
 	
+	
+	// 보스 아이디와 유저 아이디로 일치하는 데이터 가져오기
+	public BossMember selectBossMemberByBossIdAndUserId(@Param("bossId") int bossId, @Param("userId") int userId);
+	
+	// 지원 취소로 인한 멤버 삭제
+	public void deleteBossMemberByBossIdAndUserId(@Param("bossId") int bossId, @Param("userId") int userId);
+	
 }

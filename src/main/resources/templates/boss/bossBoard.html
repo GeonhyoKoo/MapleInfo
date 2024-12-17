@@ -7,7 +7,7 @@
 	
 		<div class="w-100">
 			<!-- 위 -->
-			<div class="d-flex justify-content-between mt-3">
+			<div class="d-flex justify-content-between mt-5">
 				<!-- 보스 모집 -->
 				<div>
 					<h2>보스 모집</h2>
@@ -18,11 +18,11 @@
 			</div>
 			<!-- 아래 -->
 			<div class="d-flex boardSection justify-content-center">
-				<div class="col-3 mt-3 p-0">
-					<img src="/img/maplelogo.jpg" class="w-100 bossImg">
-					<h3 class="text-center" th:text="${bossName}">보스 이름</h3>
+				<div class="col-2 mt-3 p-0">
+					<img th:src="${bossImg}" class="w-100 bossImg">
+					<h3 class="text-center mt-3" th:text="${bossName}">보스 이름</h3>
 				</div>
-				<div class="col-9">
+				<div class="col-10">
 					<div class="mt-5">
 						<table class="table text-center">
 							<thead class="font-weight-bold">
@@ -40,7 +40,8 @@
 									<td><a th:href="|/boss/detail-view?boardId=${board.id}|" th:text="${board.subject}"></a></td>
 									<td th:text="${board.world}">모집 월드</td>
 									<td th:text="${board.recommendStat}">모집 전투력</td>
-									<td th:text="${board.state}">상태</td>
+									<th:block th:if="${board.state == '종료'}"><td th:text="${board.state}" class="text-danger">상태</td></th:block>
+									<th:block th:unless="${board.state == '종료'}"><td th:text="${board.state}" class="text-info">상태</td></th:block>
 								</tr>
 							</tbody>
 						</table>

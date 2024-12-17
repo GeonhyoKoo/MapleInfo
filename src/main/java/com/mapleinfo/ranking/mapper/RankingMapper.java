@@ -1,6 +1,7 @@
 package com.mapleinfo.ranking.mapper;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,5 +21,10 @@ public interface RankingMapper {
 			@Param("characterId") int characterId, 
 			@Param("today") LocalDate today
 			);
+	
+	
+	// 랭킹 리스트 가져오기
+	public List<Ranking> selectRankingList();
+	
 	
 }
