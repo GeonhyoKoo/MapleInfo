@@ -20,3 +20,6 @@ spring:
         format_sql: true
 mybatis:
   mapper-locations: mappers/*Mapper.xml
+nexon:
+  api:
+    key: test_ffeb04606d428ece5c462b0ef001318145204b02a3bc25024208860fdd305186efe8d04e6d233bd35cf2fabdeb93fb0d
