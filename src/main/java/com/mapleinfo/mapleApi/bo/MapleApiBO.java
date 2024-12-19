@@ -1,4 +1,4 @@
-package com.mapleinfo.mapleApp.bo;
+package com.mapleinfo.mapleApi.bo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -6,19 +6,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mapleinfo.mapleApp.domain.MapleCharacterDTO;
-import com.mapleinfo.mapleApp.domain.MapleCharacterDTO.ItemEquiment;
+import com.mapleinfo.mapleApi.domain.MapleCharacterDTO;
+import com.mapleinfo.mapleApi.domain.MapleCharacterDTO.ItemEquiment;
 
 @Service
-public class MapleAppBO {
+public class MapleApiBO {
 
-	private final RestTemplate restTemplate;
+private final RestTemplate restTemplate;
 	
 	@Value("${nexon.api.key}")
 	private String apiKey;
@@ -34,7 +38,7 @@ public class MapleAppBO {
 	
 	
 	
-	 public MapleAppBO(RestTemplate restTemplate) {
+	 public MapleApiBO(RestTemplate restTemplate) {
 	        this.restTemplate = restTemplate;
 	    }
 	
@@ -44,9 +48,27 @@ public class MapleAppBO {
 		// 닉네임으로 캐릭터 정보 조회하기 위한 url 구성
 		String characterSerarchUrl = UriComponentsBuilder.fromHttpUrl(CHARACTER_URL)
 				.queryParam("character_name", nickname).toUriString();
-				
-		// 구성한 url로 api 로 조회
-		String characterResponse = restTemplate.getForObject(characterSerarchUrl, String.class);
+		
+		 // HTTP 요청 헤더 설정
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set("X-Nxopen-Api-Key", apiKey);
+		
+	    // HttpEntity 객체 생성 (헤더와 함께 전달)
+	    HttpEntity<String> entity = new HttpEntity<>(headers);
+	    
+	    // 구성한 URL로 API 조회
+	    String characterResponse = null;
+	    try {
+	        // API 호출
+	        ResponseEntity<String> response = restTemplate.exchange(characterSerarchUrl, HttpMethod.GET, entity, String.class);
+	        characterResponse = response.getBody();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	    
+		
+		
 		
 		// 장비 정보 조회 url 구성
 		// 먼저 조회한 api에서 ocid 가져오기
@@ -181,4 +203,25 @@ public class MapleAppBO {
         return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 	
+	// api키 
+	private String getApiResponse(String url) {
+	    // HTTP 요청 헤더 설정
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set("X-Nxopen-Api-Key", apiKey);  // API Key를 헤더에 포함
+
+	    // HttpEntity 객체 생성 (헤더와 함께 전달)
+	    HttpEntity<String> entity = new HttpEntity<>(headers);
+
+	    try {
+	        // API 호출
+	        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+	        return response.getBody();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	
+	
+	}
 }
+

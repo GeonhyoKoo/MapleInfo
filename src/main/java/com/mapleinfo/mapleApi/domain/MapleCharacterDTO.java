@@ -1,4 +1,4 @@
-package com.mapleinfo.mapleApp.domain;
+package com.mapleinfo.mapleApi.domain;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import lombok.Setter;
 public class MapleCharacterDTO {
 
 	
+
 	private String nickname;
 	private int level;
 	private String world;
@@ -25,8 +26,6 @@ public class MapleCharacterDTO {
 		private String itemName;
 		private String itemIcon;
 	}
-	
-	
 	
 	
 	

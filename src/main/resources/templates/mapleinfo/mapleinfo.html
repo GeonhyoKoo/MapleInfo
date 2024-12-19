@@ -112,7 +112,36 @@
 
 <th:block layout:fragment="script">
 	<script>
-	
+		
+		$(document).ready(function(){
+			
+			$("#searchBtn").on("click", function(){
+				
+				let nickname = $("#searchBox").val().trim();
+				
+				if(nickname ==""){
+					alert("검색할 닉네임을 입력해주세요.");
+					return;
+				}
+				
+				$.ajax({
+					type : "POST"
+					,url : "/maple/search"
+					,data : {"nickname" : nickname}
+					, success : function(data){
+						// 성공 시 controller에서 redirect
+					}
+					, error : function(e){
+						alert("검색된 캐릭터가 없습니다. 닉네임을 다시 입력해주세요");
+					}
+					
+					
+				});
+				
+				
+			});
+			
+		});
 	
 	</script>
 

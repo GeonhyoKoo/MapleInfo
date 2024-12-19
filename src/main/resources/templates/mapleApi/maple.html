@@ -7,10 +7,10 @@
 
 
 	<!-- 캐릭터 정보 -->
-    <div th:if="${characterInfo != null}">
-        <p><strong>Nickname:</strong> <span th:text="${characterInfo.nickname}"></span></p>
-        <p><strong>Level:</strong> <span th:text="${characterInfo.level}"></span></p>
-        <p><strong>World:</strong> <span th:text="${characterInfo.world}"></span></p>
+    <div th:if="${characterDTO != null}">
+        <p><strong>Nickname:</strong> <span th:text="${characterDTO.nickname}"></span></p>
+        <p><strong>Level:</strong> <span th:text="${characterDTO.level}"></span></p>
+        <p><strong>World:</strong> <span th:text="${characterDTO.world}"></span></p>
         <img th:src="${characterInfo.representativeImageUrl}" alt="Character Image" width="100" height="100">
 
         <!-- 장비 정보 -->
@@ -23,10 +23,7 @@
         </ul>
     </div>
 
-	 <!-- 에러 메시지 -->
-    <div th:if="${error_message != null}">
-        <span th:text="${error_message}"></span>
-    </div>
+	
 
 
 
