@@ -16,8 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 public class FileManagerService {
 	
 		// 일반 파일 업로드 경로 
-		public static final String FILE_UPLOAD_PATH = "/Users/geonhyo/koo/6_maple_project/workspace/images/";
-
+		//public static final String FILE_UPLOAD_PATH = "/Users/geonhyo/koo/6_maple_project/workspace/images/";
+	
+		public final static String FILE_UPLOAD_PATH = "/home/ec2-user/images/";
+	
 		// summernote 업로드 파일 경로
 		public static final String FILE_UPLOAD_CLASS_BOARD_PATH = "/Users/geonhyo/koo/6_maple_project/workspace/classBoard/";
 		
